@@ -1,0 +1,94 @@
+---
+import { NAV_LINKS } from "../config/navigation";
+import { siteData } from "../data/site";
+
+const links = NAV_LINKS;
+---
+
+<header class="navbar border-b border-white/10 shadow-sm backdrop-blur-sm">
+  <div class="container relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3 md:py-4">
+    <a
+      href="/"
+      class="max-w-[min(100%,16rem)] shrink-0 text-sm font-bold leading-tight sm:text-base md:text-lg"
+    >
+      {siteData.name}
+    </a>
+
+    <nav class="hidden items-center md:flex" aria-label="Primary">
+      <ul class="flex flex-wrap items-center justify-end gap-5 text-sm font-semibold lg:gap-7">
+        {
+          links.map(({ href, label }) => (
+            <li>
+              <a
+                href={href}
+                class="rounded px-1 py-0.5 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8922A]"
+              >
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <button
+      type="button"
+      class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/25 bg-black/10 md:hidden"
+      id="nav-menu-btn"
+      aria-controls="nav-mobile-panel"
+      aria-expanded="false"
+      aria-label="Open menu"
+    >
+      <span class="sr-only">Menu</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <div
+      id="nav-mobile-panel"
+      class="absolute right-6 top-full z-50 mt-2 hidden w-[min(100vw-3rem,18rem)] rounded-xl border border-white/15 bg-[#4B2E0A] py-2 shadow-xl md:hidden"
+      role="dialog"
+      aria-label="Mobile navigation"
+    >
+      <ul class="flex flex-col gap-0.5 px-2 text-sm font-semibold">
+        {
+          links.map(({ href, label }) => (
+            <li>
+              <a
+                href={href}
+                class="block rounded-lg px-3 py-2.5 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8922A]"
+              >
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var btn = document.getElementById("nav-menu-btn");
+    var panel = document.getElementById("nav-mobile-panel");
+    if (!btn || !panel) return;
+
+    function setOpen(open) {
+      panel.classList.toggle("hidden", !open);
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    }
+
+    btn.addEventListener("click", function () {
+      setOpen(panel.classList.contains("hidden"));
+    });
+
+    panel.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", function () {
+        setOpen(false);
+      });
+    });
+  })();
+</script>

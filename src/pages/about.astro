@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import { siteData } from "../data/site";
+---
+
+<BaseLayout title={`About | ${siteData.name}`} description={`Biography and public service overview for ${siteData.name}.`}>
+  <section class="container mx-auto max-w-3xl px-6 py-10 md:py-16">
+    <div class="card p-6 sm:p-8 md:p-10">
+      <SectionTitle
+        eyebrow="Profile"
+        title="About the Minister"
+        description={`${siteData.name} serves as ${siteData.title}, with a focus on accountable public finance and inclusive development.`}
+      />
+      <div class="space-y-4 text-base leading-relaxed text-[#2C2C2C]/95">
+        <p>
+          This section can be expanded with biography, education, and career milestones. Content can also be managed
+          through Decap CMS if you add a dedicated collection or page entry later.
+        </p>
+        <p>
+          For official correspondence, please use the <a href="/contact">contact form</a> or the email shown in the site
+          footer.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

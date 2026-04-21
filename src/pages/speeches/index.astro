@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SectionTitle from "../../components/SectionTitle.astro";
+
+const speeches = (await getCollection("speeches")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+---
+
+<BaseLayout title="Speeches | Hon. Henry Musasizi">
+  <section class="container mx-auto max-w-6xl px-6 py-10 md:py-16">
+    <div class="card p-6 sm:p-8 md:p-10">
+      <SectionTitle
+        eyebrow="Archive"
+        title="Speeches & Statements"
+        description="Official remarks, policy statements, and keynote addresses."
+      />
+
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {
+          speeches.map((speech) => (
+            <article class="card flex flex-col p-5 sm:p-6">
+              <span class="date-badge">{speech.data.date.toLocaleDateString("en-UG")}</span>
+              <h3 class="mt-3 text-lg font-bold text-coffee">{speech.data.title}</h3>
+              <p class="mt-2 text-sm text-[#2C2C2C]/80">{speech.data.location ?? "Uganda"}</p>
+              <a class="mt-auto pt-5 text-sm font-semibold" href={`/speeches/${speech.slug}/`}>
+                Read full text →
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

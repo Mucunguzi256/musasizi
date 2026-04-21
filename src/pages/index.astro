@@ -1,0 +1,107 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Navbar from "../components/Navbar.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import { siteData } from "../data/site";
+
+const speeches = (await getCollection("speeches")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const projects = (await getCollection("projects")).slice(0, 6);
+const recentSpeeches = speeches.slice(0, 6);
+---
+
+<BaseLayout title={`${siteData.name} | Portfolio`} description={siteData.tagline}>
+  <Navbar slot="navbar" />
+
+  <section class="container mx-auto max-w-6xl px-6 py-10 md:py-16">
+    <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+      <div class="card w-full p-6 sm:p-8 md:p-10">
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-navy sm:text-sm">Official portfolio</p>
+        <h1 class="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
+          {siteData.name}
+        </h1>
+        <div class="mt-4 h-[2px] w-24 rounded-full bg-[#C8922A]" aria-hidden="true"></div>
+        <p class="mt-4 text-lg font-semibold text-navy sm:text-xl">{siteData.title}</p>
+        <p class="mt-5 max-w-xl text-base leading-relaxed text-[#2C2C2C]/95">
+          Welcome. This site shares speeches, development projects, and public engagements—kept current through the
+          content management system for timely, accurate information.
+        </p>
+        <div class="mt-8 flex w-full max-w-md flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <a class="btn-solid-gold w-full sm:w-auto" href="/speeches">Speeches</a>
+          <a class="btn-outline-gold w-full sm:w-auto" href="/projects">Projects</a>
+        </div>
+      </div>
+
+      <div class="card flex w-full justify-center p-4 sm:p-6 md:p-8">
+        <div class="relative w-full max-w-sm">
+          <img
+            src="/images/minister-henry-musasizi.svg"
+            alt={`Official portrait of ${siteData.name}`}
+            class="mx-auto aspect-square w-full max-w-[20rem] rounded-full border-4 border-[#F5ECD7] object-cover object-top shadow-inner"
+            width="400"
+            height="400"
+            loading="eager"
+            fetchpriority="high"
+          />
+          <p class="mt-4 text-center text-sm font-medium text-[#2C2C2C]/85">{siteData.title}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container mx-auto max-w-6xl px-6 py-10 md:py-16">
+    <div class="card p-6 sm:p-8 md:p-10">
+      <SectionTitle
+        eyebrow="Latest"
+        title="Recent speeches & statements"
+        description="Policy remarks and public statements—newest first."
+      />
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {
+          recentSpeeches.map((speech) => (
+            <article class="card flex flex-col p-5 sm:p-6">
+              <span class="date-badge">{speech.data.date.toLocaleDateString("en-UG")}</span>
+              <h3 class="mt-3 text-lg font-bold text-coffee">{speech.data.title}</h3>
+              <p class="mt-2 text-sm text-[#2C2C2C]/80">{speech.data.location ?? "Uganda"}</p>
+              <a class="mt-auto pt-5 text-sm font-semibold" href={`/speeches/${speech.slug}/`}>
+                Read full text →
+              </a>
+            </article>
+          ))
+        }
+      </div>
+      <div class="mt-10 flex justify-center">
+        <a class="btn-section-footer" href="/speeches">View all speeches</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container mx-auto max-w-6xl px-6 py-10 md:py-16">
+    <div class="card p-6 sm:p-8 md:p-10">
+      <SectionTitle
+        eyebrow="Delivery"
+        title="Recent development projects"
+        description="Highlights from district and national programmes."
+      />
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {
+          projects.map((project) => (
+            <article class="card flex flex-col p-5 sm:p-6">
+              <span class="date-badge">{project.data.district}</span>
+              <h3 class="mt-3 text-lg font-bold text-coffee">{project.data.title}</h3>
+              <p class="mt-2 text-sm text-[#2C2C2C]/80">Status: {project.data.status}</p>
+              <a class="mt-auto pt-5 text-sm font-semibold" href={`/projects/${project.slug}/`}>
+                Project details →
+              </a>
+            </article>
+          ))
+        }
+      </div>
+      <div class="mt-10 flex justify-center">
+        <a class="btn-section-footer" href="/projects">View all projects</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

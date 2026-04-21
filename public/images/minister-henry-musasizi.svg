@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="750" viewBox="0 0 600 750" role="img" aria-labelledby="title desc">
+  <title id="title">Hon. Henry Musasizi  portrait placeholder</title>
+  <desc id="desc">Replace this file with an official photograph (e.g. minister-henry-musasizi.jpg) and update the hero image path in index.astro if needed.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1A3557"/>
+      <stop offset="100%" style="stop-color:#4B2E0A"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="750" fill="url(#bg)"/>
+  <circle cx="300" cy="280" r="120" fill="#F5ECD7" opacity="0.25"/>
+  <text x="300" y="480" text-anchor="middle" fill="#F5ECD7" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="700">Hon. Henry Musasizi</text>
+  <text x="300" y="515" text-anchor="middle" fill="#C8922A" font-family="Inter, system-ui, sans-serif" font-size="14">Replace with official photo</text>
+</svg>

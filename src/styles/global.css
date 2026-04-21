@@ -1,0 +1,190 @@
+@import "@fontsource/inter";
+@import "@fontsource/jetbrains-mono";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --coffee-brown: #4b2e0a;
+  --origin-gold: #c8922a;
+  --forest-green: #2d6a2d;
+  --deep-navy: #1a3557;
+  --light-tan: #f5ecd7;
+  --sidebar-bg: #fdfaf5;
+  --body-text: #2c2c2c;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: radial-gradient(circle at 20% 30%, #f5ecd7, #fdfaf5);
+  background-attachment: fixed;
+  color: var(--body-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--coffee-brown);
+}
+
+a {
+  color: var(--origin-gold);
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--coffee-brown);
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: var(--coffee-brown);
+  color: var(--light-tan);
+}
+
+.navbar a {
+  color: var(--light-tan);
+}
+
+.navbar a:hover {
+  color: var(--origin-gold);
+}
+
+/* Echo-style cards */
+.card {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.05),
+    0 8px 10px -6px rgba(0, 0, 0, 0.02);
+  border: 1px solid #f5ecd7;
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.1);
+}
+
+a.card:hover {
+  color: inherit;
+}
+
+/* Primary / secondary CTAs */
+.btn-solid-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background-color: var(--origin-gold);
+  color: var(--coffee-brown);
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.25rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.btn-solid-gold:hover {
+  background-color: var(--coffee-brown);
+  color: var(--light-tan);
+}
+
+.btn-outline-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 2px solid var(--origin-gold);
+  color: var(--origin-gold);
+  background: transparent;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.25rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.btn-outline-gold:hover {
+  background-color: var(--origin-gold);
+  color: var(--coffee-brown);
+  border-color: var(--origin-gold);
+}
+
+/* Section “view all” pill buttons */
+.btn-section-footer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 2px solid var(--origin-gold);
+  color: var(--origin-gold);
+  background: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.65rem 1.35rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.btn-section-footer:hover {
+  background-color: var(--origin-gold);
+  color: var(--coffee-brown);
+}
+
+/* Prose / code */
+.prose {
+  color: var(--body-text);
+}
+
+.prose :where(code):not(:where(pre code)) {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.9em;
+  background: rgba(75, 46, 10, 0.06);
+  padding: 0.15em 0.4em;
+  border-radius: 0.25rem;
+}
+
+.prose :where(pre) {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  background: rgba(26, 53, 87, 0.06);
+  border: 1px solid rgba(75, 46, 10, 0.08);
+  border-radius: 0.5rem;
+}
+
+.prose :where(pre code) {
+  background: transparent;
+  padding: 0;
+}
+
+/* Footer: tan links, gold on hover */
+footer[role="contentinfo"] a {
+  color: var(--light-tan);
+  opacity: 0.92;
+}
+
+footer[role="contentinfo"] a:hover {
+  color: var(--origin-gold);
+  opacity: 1;
+}
+
+/* Date badge (speeches) */
+.date-badge {
+  display: inline-block;
+  width: fit-content;
+  border-radius: 9999px;
+  background: rgba(26, 53, 87, 0.08);
+  color: var(--deep-navy);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  letter-spacing: 0.02em;
+}

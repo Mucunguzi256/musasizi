@@ -1,0 +1,74 @@
+---
+import "../styles/global.css";
+import Navbar from "../components/Navbar.astro";
+import { FOOTER_QUICK_LINKS } from "../config/navigation";
+import { siteData } from "../data/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = siteData.name, description = siteData.tagline } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <slot name="navbar">
+      <Navbar />
+    </slot>
+
+    <main class="min-h-[70vh]">
+      <slot />
+    </main>
+
+    <footer class="bg-navy py-12 text-tan md:py-14" role="contentinfo">
+      <div class="container mx-auto max-w-6xl px-6">
+        <div class="grid gap-10 md:grid-cols-3 md:gap-8">
+          <div>
+            <p class="text-base font-bold text-tan">{siteData.name}</p>
+            <p class="mt-2 text-sm leading-relaxed text-tan/90">{siteData.title}</p>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-tan/70">Quick links</p>
+            <ul class="mt-4 flex flex-col gap-2 text-sm">
+              {
+                FOOTER_QUICK_LINKS.map(({ href, label }) => (
+                  <li>
+                    <a href={href} class="focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8922A]">
+                      {label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-tan/70">Contact</p>
+            <p class="mt-4 text-sm">
+              <a class="focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8922A]" href={`mailto:${siteData.email}`}>
+                {siteData.email}
+              </a>
+            </p>
+            <div class="mt-3 text-sm leading-relaxed text-tan/85">
+              {siteData.addressLines.map((line) => (
+                <p>{line}</p>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div class="mt-10 border-t border-tan/20 pt-6 text-center text-xs text-tan/70">
+          © {year} {siteData.name}. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

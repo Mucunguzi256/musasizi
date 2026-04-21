@@ -1,0 +1,29 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export const getStaticPaths = (async () => {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={`${project.data.title} | Development Projects`}>
+  <section class="container mx-auto max-w-3xl px-6 py-10 md:py-16">
+    <article class="card p-6 sm:p-8 md:p-10">
+      <span class="date-badge">{project.data.district}</span>
+      <h1 class="mt-4 text-3xl font-extrabold sm:text-4xl">{project.data.title}</h1>
+      <p class="mt-3 font-semibold text-forest">Status: {project.data.status}</p>
+      <div class="prose prose-stone mt-8 max-w-none prose-headings:text-coffee prose-a:text-[#C8922A]">
+        <Content />
+      </div>
+    </article>
+  </section>
+</BaseLayout>
