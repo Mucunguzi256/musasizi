@@ -16,15 +16,15 @@
     "@fontsource/jetbrains-mono": "^5.1.0",
     "@types/node": "^22.0.0",
     "astro": "^5.0.0",
-    "astro-decap-cms": "^0.2.0",
     "autoprefixer": "^10.4.21",
-    "decap-cms": "^3.3.5",
-    "decap-server": "^3.7.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
     "@astrojs/mdx": "^4.3.14",
     "astro-robots-txt": "^1.0.0"
+  },
+  "overrides": {
+    "astro": "^5.0.0"
   }
 }
