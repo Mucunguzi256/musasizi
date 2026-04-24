@@ -20,30 +20,38 @@ const year = new Date().getFullYear();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href="/images/Hon_Musasiizi.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/images/Hon_Musasiizi.png" />
   </head>
-  <body>
+  <body class="min-h-screen">
+    <!-- Animated background -->
+    <div class="mesh-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
     <slot name="navbar">
       <Navbar />
     </slot>
 
-    <main class="min-h-[70vh]">
+    <main class="pt-16">
       <slot />
     </main>
 
-    <footer class="bg-navy py-12 text-tan md:py-14" role="contentinfo">
-      <div class="container mx-auto max-w-6xl px-6">
-        <div class="grid gap-10 md:grid-cols-3 md:gap-8">
+    <footer class="py-12 sm:py-16">
+      <div class="container mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
           <div>
-            <p class="text-base font-bold text-tan">{siteData.name}</p>
-            <p class="mt-2 text-sm leading-relaxed text-tan/90">{siteData.title}</p>
+            <p class="font-display text-xl sm:text-2xl font-bold text-tan">Hon. Musasizi</p>
+            <p class="mt-2 text-sm leading-relaxed text-tan/70">{siteData.title}</p>
           </div>
           <div>
-            <p class="text-xs font-bold uppercase tracking-widest text-tan/70">Quick links</p>
-            <ul class="mt-4 flex flex-col gap-2 text-sm">
+            <p class="text-xs font-bold uppercase tracking-widest text-tan/50">Quick links</p>
+            <ul class="mt-3 sm:mt-4 flex flex-col gap-2 sm:gap-3 text-sm">
               {
                 FOOTER_QUICK_LINKS.map(({ href, label }) => (
                   <li>
-                    <a href={href} class="focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8922A]">
+                    <a href={href} class="transition-smooth hover:text-gold">
                       {label}
                     </a>
                   </li>
@@ -51,21 +59,30 @@ const year = new Date().getFullYear();
               }
             </ul>
           </div>
-          <div>
-            <p class="text-xs font-bold uppercase tracking-widest text-tan/70">Contact</p>
-            <p class="mt-4 text-sm">
-              <a class="focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8922A]" href={`mailto:${siteData.email}`}>
+          <div class="sm:col-span-2 md:col-span-1">
+            <p class="text-xs font-bold uppercase tracking-widest text-tan/50">Contact</p>
+            <div class="mt-3 sm:mt-4 text-sm leading-relaxed text-tan/70">
+              <p>{siteData.addressLines[0]}</p>
+              <p>{siteData.addressLines[1]}</p>
+              <p>{siteData.addressLines[2]}</p>
+            </div>
+            <div class="mt-3 flex flex-col gap-2 text-sm">
+              <a href={`mailto:${siteData.email}`} class="transition-smooth hover:text-gold flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
                 {siteData.email}
               </a>
-            </p>
-            <div class="mt-3 text-sm leading-relaxed text-tan/85">
-              {siteData.addressLines.map((line) => (
-                <p>{line}</p>
-              ))}
+              <a href="https://x.com/henrymusasizi1" target="_blank" class="transition-smooth hover:text-gold flex items-center gap-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                @henrymusasizi1
+              </a>
             </div>
           </div>
         </div>
-        <div class="mt-10 border-t border-tan/20 pt-6 text-center text-xs text-tan/70">
+        <div class="mt-10 border-t border-white/10 pt-6 text-center text-xs text-tan/40">
           © {year} {siteData.name}. All rights reserved.
         </div>
       </div>

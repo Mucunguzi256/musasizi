@@ -2,14 +2,14 @@ backend:
   name: git-gateway
   branch: main
 
-logo_url: /images/minister-henry-musasizi.svg
+logo_url: /images/Hon_Musasiizi.png
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
 collections:
   - name: "speeches"
-    label: "Speeches & Statements"
+    label: "Speeches"
     folder: "src/content/speeches"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
@@ -20,7 +20,7 @@ collections:
       - { label: "Body", name: "body", widget: "markdown" }
 
   - name: "projects"
-    label: "Development Projects"
+    label: "Projects"
     folder: "src/content/projects"
     create: true
     slug: "{{slug}}"
@@ -31,7 +31,7 @@ collections:
       - { label: "Description", name: "body", widget: "markdown" }
 
   - name: "gallery"
-    label: "Photo Gallery"
+    label: "Gallery"
     folder: "src/content/gallery"
     create: true
     slug: "{{slug}}"
@@ -41,3 +41,16 @@ collections:
       - { label: "Caption", name: "caption", widget: "string", required: false }
       - { label: "Date", name: "date", widget: "datetime", required: false }
       - { label: "Body", name: "body", widget: "markdown", required: false }
+
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Category", name: "category", widget: "select", options: ["Speeches", "Policy", "Economic Updates", "Constituency Projects"] }
+      - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
+      - { label: "Source", name: "source", widget: "string", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }

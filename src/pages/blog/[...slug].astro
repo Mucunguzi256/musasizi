@@ -1,0 +1,46 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Navbar from "../../components/Navbar.astro";
+import { siteData } from "../../data/site";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+---
+
+<BaseLayout title={`${post.data.title} | Blog`} description={post.data.excerpt}>
+  <Navbar slot="navbar" />
+
+  <section class="container mx-auto max-w-3xl px-6 py-10 md:py-16">
+    <div class="card p-6 sm:p-8 md:p-10">
+      <a href="/blog" class="text-sm font-medium text-[#C8922A]">← Back to Blog</a>
+      
+      <div class="mt-4 flex items-center gap-3">
+        <span class="date-badge">{post.data.date.toLocaleDateString("en-UG")}</span>
+        <span class="text-sm font-medium text-[#C8922A]">{post.data.category}</span>
+      </div>
+      
+      <h1 class="mt-4 text-2xl font-bold text-navy md:text-3xl">{post.data.title}</h1>
+      
+      {post.data.source && (
+        <p class="mt-2 text-sm text-gray-500">Source: {post.data.source}</p>
+      )}
+      
+      <div class="mt-6 flex gap-4 border-b border-gray-200 pb-4">
+        <a href={`https://x.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${siteData.url}/blog/${post.slug}/`} target="_blank" class="text-sm font-medium text-[#1DA1F2]">Share on X</a>
+        <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${siteData.url}/blog/${post.slug}/`} target="_blank" class="text-sm font-medium text-[#0077B5]">Share on LinkedIn</a>
+      </div>
+      
+      <div class="prose mt-6 max-w-none">
+        <slot />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

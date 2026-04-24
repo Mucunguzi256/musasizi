@@ -31,8 +31,11 @@ const gallery = defineCollection({
 const blog = defineCollection({
   type: "content",
   schema: z.object({
-    title: z.string().optional(),
-    date: z.coerce.date().optional()
+    title: z.string(),
+    date: z.coerce.date(),
+    category: z.enum(["Speeches", "Policy", "Economic Updates", "Constituency Projects"]),
+    excerpt: z.string().optional(),
+    source: z.string().optional()
   })
 });
 

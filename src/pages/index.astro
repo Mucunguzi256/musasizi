@@ -8,99 +8,172 @@ import { siteData } from "../data/site";
 const speeches = (await getCollection("speeches")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
-const projects = (await getCollection("projects")).slice(0, 6);
 const recentSpeeches = speeches.slice(0, 6);
 ---
 
 <BaseLayout title={`${siteData.name} | Portfolio`} description={siteData.tagline}>
   <Navbar slot="navbar" />
 
-  <section class="container mx-auto max-w-6xl px-6 py-10 md:py-16">
-    <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-      <div class="card w-full p-6 sm:p-8 md:p-10">
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-navy sm:text-sm">Official portfolio</p>
-        <h1 class="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
-          {siteData.name}
-        </h1>
-        <div class="mt-4 h-[2px] w-24 rounded-full bg-[#C8922A]" aria-hidden="true"></div>
-        <p class="mt-4 text-lg font-semibold text-navy sm:text-xl">{siteData.title}</p>
-        <p class="mt-5 max-w-xl text-base leading-relaxed text-[#2C2C2C]/95">
-          Welcome. This site shares speeches, development projects, and public engagements—kept current through the
-          content management system for timely, accurate information.
-        </p>
-        <div class="mt-8 flex w-full max-w-md flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <a class="btn-solid-gold w-full sm:w-auto" href="/speeches">Speeches</a>
-          <a class="btn-outline-gold w-full sm:w-auto" href="/projects">Projects</a>
+  <!-- Hero Section -->
+  <section class="relative min-h-[90vh] flex items-center">
+    <!-- Background Image (Mobile) -->
+    <div class="absolute inset-0 z-0 md:hidden">
+      <img src="/images/Hon_Musasiizi.png" alt="" class="w-full h-full object-cover opacity-15" />
+      <div class="absolute inset-0 bg-gradient-to-b from-[#1c1917] via-[#1f1b18]/90 to-[#1f1b18]"></div>
+    </div>
+    
+    <div class="container mx-auto max-w-6xl px-4 sm:px-6 relative z-10">
+      <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-20">
+        <div class="animate-fade-in">
+          <span class="section-label">Official Portfolio</span>
+          <h1 class="font-display text-4xl sm:text-5xl font-bold leading-tight md:text-6xl lg:text-7xl mt-2">
+            {siteData.name}
+          </h1>
+          
+          <div class="mt-6 sm:mt-8 h-[2px] w-24 rounded-full bg-gradient-to-r from-gold to-transparent"></div>
+          
+          <p class="mt-4 sm:mt-6 text-base sm:text-lg text-tan/70 max-w-xl leading-relaxed">
+            CPA turned politician driving Uganda's economic transformation as 
+            <span class="text-gold font-semibold">Minister of State for Finance</span> (General Duties). 
+            MP for Rubanda East since 2011.
+          </p>
+          
+          <div class="mt-8 sm:mt-10 flex flex-wrap gap-3 sm:gap-4">
+            <a href="/about" class="btn-primary text-sm sm:text-base">
+              More About Henry
+              <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            <a href="/speeches" class="btn-secondary text-sm sm:text-base">
+              Speeches
+            </a>
+          </div>
+        </div>
+        
+        <!-- Desktop Hero Image -->
+        <div class="relative animate-fade-in delay-200 hidden md:block">
+          <div class="relative">
+            <img
+              src="/images/Hon_Musasiizi.png"
+              alt={siteData.name}
+              class="relative w-full max-w-md mx-auto rounded-2xl shadow-2xl"
+              style="aspect-ratio: 1; object-fit: cover;"
+            />
+          </div>
         </div>
       </div>
+      
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
+        <svg class="w-6 h-6 text-tan/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </div>
+    </div>
+  </section>
 
-      <div class="card flex w-full justify-center p-4 sm:p-6 md:p-8">
-        <div class="relative w-full max-w-sm">
-          <img
-            src="/images/minister-henry-musasizi.svg"
-            alt={`Official portrait of ${siteData.name}`}
-            class="mx-auto aspect-square w-full max-w-[20rem] rounded-full border-4 border-[#F5ECD7] object-cover object-top shadow-inner"
-            width="400"
-            height="400"
-            loading="eager"
-            fetchpriority="high"
-          />
-          <p class="mt-4 text-center text-sm font-medium text-[#2C2C2C]/85">{siteData.title}</p>
+  <!-- Stats Section - visible on all screens -->
+  <section class="py-10 sm:py-16">
+    <div class="container mx-auto max-w-6xl px-3 sm:px-6">
+      <div class="grid grid-cols-4 gap-2 sm:gap-4">
+        <div class="glass p-2 sm:p-6 text-center rounded-lg sm:rounded-xl">
+          <p class="font-display text-sm sm:text-4xl font-bold text-gold">2011</p>
+          <p class="mt-1 text-[10px] sm:text-sm text-tan/60">MP</p>
+        </div>
+        <div class="glass p-2 sm:p-6 text-center rounded-lg sm:rounded-xl">
+          <p class="font-display text-sm sm:text-4xl font-bold text-gold">2021</p>
+          <p class="mt-1 text-[10px] sm:text-sm text-tan/60">Minister</p>
+        </div>
+        <div class="glass p-2 sm:p-6 text-center rounded-lg sm:rounded-xl">
+          <p class="font-display text-sm sm:text-4xl font-bold text-gold">10+</p>
+          <p class="mt-1 text-[10px] sm:text-sm text-tan/60">Years</p>
+        </div>
+        <div class="glass p-2 sm:p-6 text-center rounded-lg sm:rounded-xl">
+          <p class="font-display text-sm sm:text-4xl font-bold text-gold">$500B</p>
+          <p class="mt-1 text-[10px] sm:text-sm text-tan/60">GDP</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="container mx-auto max-w-6xl px-6 py-10 md:py-16">
-    <div class="card p-6 sm:p-8 md:p-10">
-      <SectionTitle
-        eyebrow="Latest"
-        title="Recent speeches & statements"
-        description="Policy remarks and public statements—newest first."
-      />
-      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {
-          recentSpeeches.map((speech) => (
-            <article class="card flex flex-col p-5 sm:p-6">
-              <span class="date-badge">{speech.data.date.toLocaleDateString("en-UG")}</span>
-              <h3 class="mt-3 text-lg font-bold text-coffee">{speech.data.title}</h3>
-              <p class="mt-2 text-sm text-[#2C2C2C]/80">{speech.data.location ?? "Uganda"}</p>
-              <a class="mt-auto pt-5 text-sm font-semibold" href={`/speeches/${speech.slug}/`}>
-                Read full text →
+  <!-- Recent Speeches -->
+  <section class="section">
+    <div class="container mx-auto max-w-6xl px-4 sm:px-6">
+      <div class="glass-card p-6 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl">
+        <SectionTitle
+          eyebrow="Latest"
+          title="Recent Speeches & Statements"
+          description="Policy remarks and public statements."
+        />
+        
+        <div class="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3 mt-8 sm:mt-10">
+          {
+            recentSpeeches.map((speech) => (
+              <a href={`/speeches/${speech.slug}/`} class="glass p-4 sm:p-5 rounded-xl transition-smooth group hover:border-gold/30">
+                <span class="date-badge text-xs">{speech.data.date.toLocaleDateString("en-UG")}</span>
+                <h3 class="mt-2 sm:mt-3 text-base sm:text-lg font-semibold text-tan group-hover:text-gold transition-smooth">
+                  {speech.data.title}
+                </h3>
+                <p class="mt-1 sm:mt-2 text-xs sm:text-sm text-tan/50">{speech.data.location ?? "Uganda"}</p>
               </a>
-            </article>
-          ))
-        }
-      </div>
-      <div class="mt-10 flex justify-center">
-        <a class="btn-section-footer" href="/speeches">View all speeches</a>
+            ))
+          }
+        </div>
+        
+        <div class="mt-8 sm:mt-10 flex justify-center">
+          <a href="/speeches" class="btn-secondary text-sm sm:text-base">
+            View All Speeches
+            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="container mx-auto max-w-6xl px-6 py-10 md:py-16">
-    <div class="card p-6 sm:p-8 md:p-10">
-      <SectionTitle
-        eyebrow="Delivery"
-        title="Recent development projects"
-        description="Highlights from district and national programmes."
-      />
-      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {
-          projects.map((project) => (
-            <article class="card flex flex-col p-5 sm:p-6">
-              <span class="date-badge">{project.data.district}</span>
-              <h3 class="mt-3 text-lg font-bold text-coffee">{project.data.title}</h3>
-              <p class="mt-2 text-sm text-[#2C2C2C]/80">Status: {project.data.status}</p>
-              <a class="mt-auto pt-5 text-sm font-semibold" href={`/projects/${project.slug}/`}>
-                Project details →
-              </a>
-            </article>
-          ))
-        }
+  <!-- Contact Section -->
+  <section class="section pb-16 sm:pb-24">
+    <div class="container mx-auto max-w-3xl px-4 sm:px-6">
+      <div class="text-center mb-8 sm:mb-12">
+        <span class="section-label">Contact</span>
+        <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold">Get in Touch</h2>
       </div>
-      <div class="mt-10 flex justify-center">
-        <a class="btn-section-footer" href="/projects">View all projects</a>
+      
+      <div class="glass-card p-6 sm:p-8 rounded-2xl">
+        <form class="space-y-4 sm:space-y-6">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-tan/60 mb-2">Name</label>
+              <input type="text" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-tan placeholder:text-tan/30 focus:border-gold/50 focus:outline-none" placeholder="Your name" />
+            </div>
+            <div>
+              <label class="block text-xs text-tan/60 mb-2">Email</label>
+              <input type="email" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-tan placeholder:text-tan/30 focus:border-gold/50 focus:outline-none" placeholder="your@email.com" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-tan/60 mb-2">Subject</label>
+            <input type="text" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-tan placeholder:text-tan/30 focus:border-gold/50 focus:outline-none" placeholder="Subject" />
+          </div>
+          <div>
+            <label class="block text-xs text-tan/60 mb-2">Message</label>
+            <textarea rows="4" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-tan placeholder:text-tan/30 focus:border-gold/50 focus:outline-none resize-none" placeholder="Your message..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary w-full">
+            Send Message
+          </button>
+        </form>
+        
+        <div class="mt-8 pt-6 border-t border-white/10 text-center">
+          <p class="text-sm text-tan/60 mb-3">Or reach out directly:</p>
+          <div class="flex flex-col sm:flex-row justify-center gap-4 text-sm">
+            <a href="mailto:office@henrymusasizi.ug" class="text-gold hover:underline">office@henrymusasizi.ug</a>
+            <span class="hidden sm:inline text-tan/30">|</span>
+            <a href="https://x.com/henrymusasizi1" target="_blank" class="text-gold hover:underline">@henrymusasizi1</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>

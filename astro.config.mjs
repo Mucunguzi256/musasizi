@@ -5,6 +5,7 @@ import robotsTxt from "astro-robots-txt";
 
 export default defineConfig({
   site: "https://henrymusasizi.ug",
+  publicDir: "public",
   integrations: [
     tailwind(),
     mdx(),

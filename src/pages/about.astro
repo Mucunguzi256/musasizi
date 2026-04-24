@@ -1,26 +1,202 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import SectionTitle from "../components/SectionTitle.astro";
+import Navbar from "../components/Navbar.astro";
 import { siteData } from "../data/site";
 ---
 
 <BaseLayout title={`About | ${siteData.name}`} description={`Biography and public service overview for ${siteData.name}.`}>
-  <section class="container mx-auto max-w-3xl px-6 py-10 md:py-16">
-    <div class="card p-6 sm:p-8 md:p-10">
-      <SectionTitle
-        eyebrow="Profile"
-        title="About the Minister"
-        description={`${siteData.name} serves as ${siteData.title}, with a focus on accountable public finance and inclusive development.`}
-      />
-      <div class="space-y-4 text-base leading-relaxed text-[#2C2C2C]/95">
-        <p>
-          This section can be expanded with biography, education, and career milestones. Content can also be managed
-          through Decap CMS if you add a dedicated collection or page entry later.
-        </p>
-        <p>
-          For official correspondence, please use the <a href="/contact">contact form</a> or the email shown in the site
-          footer.
-        </p>
+  <Navbar slot="navbar" />
+
+  <!-- Hero Section -->
+  <section class="min-h-[60vh] flex items-center pt-16 sm:pt-20">
+    <!-- Background Image (Mobile) -->
+    <div class="absolute inset-0 z-0 md:hidden">
+      <img src="/images/Hon_Musasiizi.png" alt="" class="w-full h-full object-cover opacity-15" />
+      <div class="absolute inset-0 bg-gradient-to-b from-[#1c1917] via-[#1f1b18]/90 to-[#1f1b18]"></div>
+    </div>
+    
+    <div class="container mx-auto max-w-6xl px-4 sm:px-6 relative z-10">
+      <div class="grid items-center gap-8 lg:grid-cols-2">
+        <div class="animate-fade-in">
+          <span class="section-label">Profile</span>
+          <h1 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mt-2">
+            About {siteData.name}
+          </h1>
+          
+          <div class="mt-4 sm:mt-6 h-[2px] w-24 rounded-full bg-gradient-to-r from-gold to-transparent"></div>
+          
+          <p class="mt-4 sm:mt-6 text-base sm:text-lg text-tan/70 leading-relaxed">
+            Born 25 February 1981 in Rubanda, Kabale District. CPA turned politician driving Uganda's economic transformation. 
+            MP for Rubanda East since 2011.
+          </p>
+          <p class="mt-4 text-base sm:text-lg text-tan/70 leading-relaxed">
+            Appointed State Minister for Finance (General Duties) by H.E. Yoweri Museveni in June 2021. 
+            Former Chairperson of the Committee on Finance, Planning & Economic Development (2016–2021).
+          </p>
+        </div>
+        
+        <!-- Desktop Image -->
+        <div class="relative animate-fade-in delay-200 hidden md:block">
+          <div class="relative">
+            <img
+              src="/images/Hon_Musasiizi.png"
+              alt={siteData.name}
+              class="w-full max-w-md mx-auto rounded-2xl"
+              style="aspect-ratio: 1; object-fit: cover;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Navigation Cards -->
+  <section class="py-12 sm:py-20">
+    <div class="container mx-auto max-w-6xl px-4 sm:px-6">
+      <div class="grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <a href="#biography" class="glass-card p-4 sm:p-6 group cursor-pointer">
+          <h3 class="font-display text-base sm:text-xl font-semibold text-tan group-hover:text-gold transition-smooth">Full Biography</h3>
+          <p class="mt-2 sm:mt-3 text-xs sm:text-sm text-tan/50">Born Feb 1981 in Rubanda, Kabale.</p>
+        </a>
+        
+        <a href="#experience" class="glass-card p-4 sm:p-6 group cursor-pointer">
+          <h3 class="font-display text-base sm:text-xl font-semibold text-tan group-hover:text-gold transition-smooth">CV / Experience</h3>
+          <p class="mt-2 sm:mt-3 text-xs sm:text-sm text-tan/50">Minister of State for Finance (2021–present).</p>
+        </a>
+        
+        <a href="#positions" class="glass-card p-4 sm:p-6 group cursor-pointer">
+          <h3 class="font-display text-base sm:text-xl font-semibold text-tan group-hover:text-gold transition-smooth">Positions Held</h3>
+          <p class="mt-2 sm:mt-3 text-xs sm:text-sm text-tan/50">MP Rubanda East, Finance Committee Chair.</p>
+        </a>
+        
+        <a href="#education" class="glass-card p-4 sm:p-6 group cursor-pointer">
+          <h3 class="font-display text-base sm:text-xl font-semibold text-tan group-hover:text-gold transition-smooth">Education</h3>
+          <p class="mt-2 sm:mt-3 text-xs sm:text-sm text-tan/50">MBA Heriot-Watt, B.Com Makerere, CPA.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Biography Section -->
+  <section id="biography" class="py-12 sm:py-16">
+    <div class="container mx-auto max-w-4xl px-4 sm:px-6">
+      <div class="glass-card p-6 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl">
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-tan">Full Biography</h2>
+        <div class="mt-4 h-[2px] w-24 rounded-full bg-gradient-to-r from-gold to-transparent"></div>
+        
+        <div class="mt-6 sm:mt-8 space-y-3 sm:space-y-4 text-base leading-relaxed text-tan/80">
+          <p><strong class="text-tan">Born:</strong> 25 February 1981 in Rubanda, Kabale District, Uganda</p>
+          <p><strong class="text-tan">Family:</strong> Bakiga ethnicity, Catholic faith</p>
+          <p class="mt-4 sm:mt-6">
+            {siteData.name} is a Certified Public Accountant (CPA) turned politician who has dedicated his career to advancing Uganda's economic transformation through public finance management and policy reform.
+          </p>
+          <p>
+            First elected as Member of Parliament for Rubanda East Constituency in 2011, he has served in various key parliamentary committees and was appointed State Minister for Finance (General Duties) by His Excellency President Yoweri Museveni in June 2021.
+          </p>
+          <p>
+            In the 10th Parliament, he served as Chairperson of the Committee on Finance, Planning & Economic Development, where he oversaw major fiscal legislation and budget oversight.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section id="experience" class="py-12 sm:py-16">
+    <div class="container mx-auto max-w-4xl px-4 sm:px-6">
+      <div class="glass-card p-6 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl">
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-tan">CV / Detailed Work Experience</h2>
+        <div class="mt-4 h-[2px] w-24 rounded-full bg-gradient-to-r from-gold to-transparent"></div>
+        
+        <div class="mt-6 sm:mt-8 space-y-4 sm:space-y-6 text-base leading-relaxed text-tan/80">
+          <div>
+            <h3 class="font-semibold text-gold">Current Positions</h3>
+            <ul class="mt-2 sm:mt-3 list-disc pl-4 sm:pl-5 space-y-2">
+              <li><strong>Minister of State for Finance (General Duties)</strong> — 2021 to Present</li>
+              <li><strong>Chairman NRM Rubanda District</strong> — 2020 to Present</li>
+              <li><strong>Member of Parliament for Rubanda East</strong> — 2011 to Present</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-gold">Previous Experience</h3>
+            <ul class="mt-2 sm:mt-3 list-disc pl-4 sm:pl-5 space-y-2">
+              <li><strong>Partner, AHMHE Associates</strong> (CPA Firm) — 2012 to 2015</li>
+              <li><strong>Regional Accountant, AMREF</strong> — 2009 to 2010</li>
+              <li><strong>Project Accountant, AMREF</strong> — 2007 to 2009</li>
+              <li><strong>Accountant, CARITAS Kabale Diocese</strong> — 2006 to 2007</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Positions Section -->
+  <section id="positions" class="py-12 sm:py-16">
+    <div class="container mx-auto max-w-4xl px-4 sm:px-6">
+      <div class="glass-card p-6 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl">
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-tan">Positions Held (Governmental & Party)</h2>
+        <div class="mt-4 h-[2px] w-24 rounded-full bg-gradient-to-r from-gold to-transparent"></div>
+        
+        <div class="mt-6 sm:mt-8 grid gap-4 sm:gap-6 text-base leading-relaxed text-tan/80 sm:grid-cols-2">
+          <div>
+            <h3 class="font-semibold text-gold">Parliamentary</h3>
+            <ul class="mt-2 sm:mt-3 list-disc pl-4 sm:pl-5 space-y-2">
+              <li>Member of Parliament for Rubanda East (2011–present)</li>
+              <li>Chairperson, Finance Committee (2016–2021)</li>
+              <li>Member, Business Committee</li>
+              <li>Member, Presidential Advisory Committee</li>
+              <li>Member, Public Accounts Committee (2011–2018)</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-gold">Party & District</h3>
+            <ul class="mt-2 sm:mt-3 list-disc pl-4 sm:pl-5 space-y-2">
+              <li>Chairman, NRM Rubanda District (2020–present)</li>
+              <li>Chairman, Kabale District Roads</li>
+              <li>Treasurer, Kabale Parliamentary Forum</li>
+              <li>Member, Kigezi Parliamentary Forum</li>
+              <li>Vice Chairman, Youth Affairs Forum</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education Section -->
+  <section id="education" class="py-12 sm:py-16 pb-16 sm:pb-24">
+    <div class="container mx-auto max-w-4xl px-4 sm:px-6">
+      <div class="glass-card p-6 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl">
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-tan">Education</h2>
+        <div class="mt-4 h-[2px] w-24 rounded-full bg-gradient-to-r from-gold to-transparent"></div>
+        
+        <div class="mt-6 sm:mt-8 space-y-3 sm:space-y-4 text-base text-tan/80">
+          <div class="flex justify-between border-b border-white/10 py-2 sm:py-3">
+            <span class="font-semibold">MBA – Heriot-Watt University</span>
+            <span class="text-tan/50 text-sm sm:text-base">(Edinburgh) – 2012</span>
+          </div>
+          <div class="flex justify-between border-b border-white/10 py-2 sm:py-3">
+            <span class="font-semibold">CPA – ICPAU</span>
+            <span class="text-tan/50 text-sm sm:text-base">2009</span>
+          </div>
+          <div class="flex justify-between border-b border-white/10 py-2 sm:py-3">
+            <span class="font-semibold">Bachelor of Commerce</span>
+            <span class="text-tan/50 text-sm sm:text-base">Makerere – 2005</span>
+          </div>
+          <div class="flex justify-between border-b border-white/10 py-2 sm:py-3">
+            <span class="font-semibold">UACE</span>
+            <span class="text-tan/50 text-sm sm:text-base">Kigezi College – 2000</span>
+          </div>
+          <div class="flex justify-between border-b border-white/10 py-2 sm:py-3">
+            <span class="font-semibold">UCE</span>
+            <span class="text-tan/50 text-sm sm:text-base">Kigezi College – 1998</span>
+          </div>
+          <div class="flex justify-between py-2 sm:py-3">
+            <span class="font-semibold">PLE</span>
+            <span class="text-tan/50 text-sm sm:text-base">Kabale – 1994</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>

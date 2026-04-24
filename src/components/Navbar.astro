@@ -5,84 +5,157 @@ import { siteData } from "../data/site";
 const links = NAV_LINKS;
 ---
 
-<header class="navbar border-b border-white/10 shadow-sm backdrop-blur-sm">
-  <div class="container relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3 md:py-4">
-    <a
-      href="/"
-      class="max-w-[min(100%,16rem)] shrink-0 text-sm font-bold leading-tight sm:text-base md:text-lg"
-    >
-      {siteData.name}
+<header class="navbar">
+  <div class="container mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+    <!-- Logo + Site Name -->
+    <a href="/" class="flex items-center gap-2">
+      <img src="/images/Hon_Musasiizi.png" alt="Logo" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover" />
+      <span class="font-display text-sm sm:text-lg font-bold">Hon. Musasizi</span>
     </a>
 
     <nav class="hidden items-center md:flex" aria-label="Primary">
-      <ul class="flex flex-wrap items-center justify-end gap-5 text-sm font-semibold lg:gap-7">
+      <ul class="flex flex-wrap items-center justify-end gap-6 text-sm font-medium">
         {
-          links.map(({ href, label }) => (
-            <li>
-              <a
-                href={href}
-                class="rounded px-1 py-0.5 transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8922A]"
-              >
-                {label}
-              </a>
+          links.map(({ href, label, children }) => (
+            <li class="relative group">
+              {children ? (
+                <>
+                  <button
+                    type="button"
+                    class="flex items-center gap-1 transition-smooth hover:text-gold"
+                  >
+                    {label}
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div class="absolute right-0 top-full mt-2 hidden w-44 rounded-xl glass py-2 group-hover:block">
+                    <ul class="flex flex-col">
+                      {children.map(({ href, label }) => (
+                        <li>
+                          <a href={href} class="block px-4 py-2 transition-smooth hover:bg-white/5 hover:text-gold">
+                            {label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <a href={href} class="transition-smooth hover:text-gold">
+                  {label}
+                </a>
+              )}
             </li>
           ))
         }
       </ul>
     </nav>
 
+    <!-- Mobile Hamburger -->
     <button
       type="button"
-      class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/25 bg-black/10 md:hidden"
+      class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 glass md:hidden"
       id="nav-menu-btn"
       aria-controls="nav-mobile-panel"
       aria-expanded="false"
       aria-label="Open menu"
     >
-      <span class="sr-only">Menu</span>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <path d="M4 6h16M4 12h16M4 18h16"></path>
       </svg>
     </button>
 
+    <!-- Mobile Full Screen Panel -->
     <div
       id="nav-mobile-panel"
-      class="absolute right-6 top-full z-50 mt-2 hidden w-[min(100vw-3rem,18rem)] rounded-xl border border-white/15 bg-[#4B2E0A] py-2 shadow-xl md:hidden"
+      class="fixed inset-0 z-50 hidden bg-[#0a0a0e]/98 backdrop-blur-xl md:hidden"
       role="dialog"
       aria-label="Mobile navigation"
     >
-      <ul class="flex flex-col gap-0.5 px-2 text-sm font-semibold">
-        {
-          links.map(({ href, label }) => (
-            <li>
-              <a
-                href={href}
-                class="block rounded-lg px-3 py-2.5 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8922A]"
-              >
-                {label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+      <div class="flex h-full flex-col">
+        <!-- Mobile Header -->
+        <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
+          <a href="/" class="flex items-center gap-2" onclick="closeMobileMenu()">
+            <img src="/images/Hon_Musasiizi.png" alt="Logo" class="w-10 h-10 rounded-full object-cover" />
+            <span class="font-display text-lg font-bold">Hon. Musasizi</span>
+          </a>
+          <button
+            type="button"
+            class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10"
+            id="nav-close-btn"
+            aria-label="Close menu"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <!-- Mobile Nav Links -->
+        <nav class="flex-1 overflow-y-auto px-4 py-6">
+          <ul class="flex flex-col gap-1 text-base font-medium">
+            {
+              links.map(({ href, label, children }) => (
+                <li>
+                  {children ? (
+                    <>
+                      <div class="border-b border-white/10 pb-2 mb-2">
+                        <span class="text-sm text-tan/50">{label}</span>
+                      </div>
+                      <ul class="mt-2 flex flex-col gap-1 pl-2">
+                        {children.map(({ href, label }) => (
+                          <li>
+                            <a href={href} class="block rounded-lg px-3 py-3 transition-smooth hover:bg-white/5 hover:text-gold" onclick="closeMobileMenu()">
+                              {label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <a href={href} class="block rounded-lg px-3 py-3 transition-smooth hover:bg-white/5 hover:text-gold" onclick="closeMobileMenu()">
+                      {label}
+                    </a>
+                  )}
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <!-- Mobile Footer -->
+        <div class="border-t border-white/10 px-4 py-4 text-center text-xs text-tan/40">
+          © {new Date().getFullYear()} {siteData.name}
+        </div>
+      </div>
     </div>
   </div>
 </header>
 
 <script is:inline>
-  (function () {
-    var btn = document.getElementById("nav-menu-btn");
+  function closeMobileMenu() {
     var panel = document.getElementById("nav-mobile-panel");
-    if (!btn || !panel) return;
+    if(panel) panel.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+  
+  (function() {
+    var btn = document.getElementById("nav-menu-btn");
+    var closeBtn = document.getElementById("nav-close-btn");
+    var panel = document.getElementById("nav-mobile-panel");
+    if (!btn || !panel || !closeBtn) return;
 
     function setOpen(open) {
       panel.classList.toggle("hidden", !open);
       btn.setAttribute("aria-expanded", open ? "true" : "false");
-      btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      document.body.style.overflow = open ? "hidden" : "";
     }
 
     btn.addEventListener("click", function () {
       setOpen(panel.classList.contains("hidden"));
+    });
+
+    closeBtn.addEventListener("click", function () {
+      setOpen(false);
     });
 
     panel.querySelectorAll("a").forEach(function (a) {
