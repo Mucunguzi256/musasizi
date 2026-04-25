@@ -66,18 +66,18 @@ const links = NAV_LINKS;
       </svg>
     </button>
 
-    <!-- Mobile Slide-in Panel (50% width from right) -->
+    <!-- Mobile Slide-in Panel (50% width, 50-60% height from right) -->
     <!-- Backdrop overlay for left 50% -->
     <div
       id="nav-mobile-backdrop"
-      class="fixed inset-0 bg-black/50 md:hidden"
+      class="fixed left-0 top-0 w-[50%] h-[50dvh] bg-black/40 md:hidden"
       style="z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;"
     ></div>
     <!-- Slide-in Panel -->
     <div
       id="nav-mobile-panel"
-      class="fixed top-0 right-0 w-[50%] h-[100dvh] bg-[#c8922a] md:hidden overflow-y-auto"
-      style="z-index: 1000; transform: translateX(100%); transition: transform 0.3s ease;"
+      class="fixed top-0 right-0 w-[50%] md:hidden overflow-y-auto"
+      style="z-index: 1000; height: 50dvh; max-height: 60dvh; background: linear-gradient(135deg, #c8922a 0%, #a67c1f 100%) !important; transform: translateX(100%); transition: transform 0.3s ease; border-radius: 0 0 0 16px;"
       role="dialog"
       aria-label="Mobile navigation"
     >
