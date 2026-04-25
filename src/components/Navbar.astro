@@ -92,8 +92,8 @@ const links = NAV_LINKS;
           </button>
         </div>
         <!-- Mobile Nav Links -->
-        <nav class="flex-1 overflow-y-auto px-4 py-4">
-          <ul class="flex flex-col gap-1 text-base font-medium py-2">
+        <nav class="flex-1 overflow-y-auto px-4 py-2">
+          <ul class="flex flex-col gap-0 text-sm font-medium">
             {
               links.map(({ href, label, children }) => (
                 <li>
@@ -102,10 +102,10 @@ const links = NAV_LINKS;
                       <div class="border-b border-white/10 pb-2 mb-2">
                         <span class="text-sm text-tan/50">{label}</span>
                       </div>
-                      <ul class="mt-2 flex flex-col gap-1 pl-2">
+                      <ul class="mt-2 flex flex-col gap-0 pl-2">
                         {children.map(({ href, label }) => (
                           <li>
-                            <a href={href} class="block rounded-lg px-3 py-3 transition-smooth hover:bg-white/5 hover:text-gold" onclick="closeMobileMenu()">
+                            <a href={href} class="block rounded-lg px-3 py-2 transition-smooth hover:bg-white/5 hover:text-gold" onclick="closeMobileMenu()">
                               {label}
                             </a>
                           </li>
@@ -113,7 +113,7 @@ const links = NAV_LINKS;
                       </ul>
                     </>
                   ) : (
-                    <a href={href} class="block rounded-lg px-3 py-3 transition-smooth hover:bg-white/5 hover:text-gold" onclick="closeMobileMenu()">
+                    <a href={href} class="block rounded-lg px-3 py-2 transition-smooth hover:bg-white/5 hover:text-gold" onclick="closeMobileMenu()">
                       {label}
                     </a>
                   )}
