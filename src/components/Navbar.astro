@@ -66,47 +66,54 @@ const links = NAV_LINKS;
       </svg>
     </button>
 
-    <!-- Mobile Full Screen Panel -->
+    <!-- Mobile Slide-in Panel (50% width from right) -->
+    <!-- Backdrop overlay for left 50% -->
+    <div
+      id="nav-mobile-backdrop"
+      class="fixed inset-0 bg-black/50 md:hidden"
+      style="z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;"
+    ></div>
+    <!-- Slide-in Panel -->
     <div
       id="nav-mobile-panel"
-      class="fixed inset-0 z-50 hidden bg-[#0a0a0e]/98 backdrop-blur-xl md:hidden overflow-y-auto"
-      style="height: 100dvh;"
+      class="fixed top-0 right-0 w-[50%] h-[100dvh] bg-[#c8922a] md:hidden overflow-y-auto"
+      style="z-index: 1000; transform: translateX(100%); transition: transform 0.3s ease;"
       role="dialog"
       aria-label="Mobile navigation"
     >
-      <div class="flex flex-col h-full">
+      <div class="flex flex-col h-full text-black">
         <!-- Mobile Header -->
-        <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
+        <div class="flex items-center justify-between border-b border-black/20 px-4 py-3">
           <a href="/" class="flex items-center gap-2" onclick="closeMobileMenu()">
             <img src="/images/Hon_Musasiizi.png" alt="Logo" class="w-10 h-10 rounded-full object-cover" />
-            <span class="font-display text-lg font-bold">Hon. Musasizi</span>
+            <span class="font-display text-lg font-bold text-black">Hon. Musasizi</span>
           </a>
           <button
             type="button"
-            class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10"
+            class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-black/10"
             id="nav-close-btn"
             aria-label="Close menu"
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2">
               <path d="M18 6L6 18M6 6l12 12"></path>
             </svg>
           </button>
         </div>
         <!-- Mobile Nav Links -->
         <nav class="flex-1 overflow-y-auto px-4 py-2">
-          <ul class="flex flex-col gap-0 text-sm font-medium">
+          <ul class="flex flex-col gap-0 text-base font-medium">
             {
               links.map(({ href, label, children }) => (
                 <li>
                   {children ? (
                     <>
-                      <div class="border-b border-white/10 pb-2 mb-2">
-                        <span class="text-sm text-tan/50">{label}</span>
+                      <div class="border-b border-black/20 pb-2 mb-2">
+                        <span class="text-sm text-black/70">{label}</span>
                       </div>
                       <ul class="mt-2 flex flex-col gap-0 pl-2">
                         {children.map(({ href, label }) => (
                           <li>
-                            <a href={href} class="block rounded-lg px-3 py-2 transition-smooth hover:bg-white/5 hover:text-gold" onclick="closeMobileMenu()">
+                            <a href={href} class="block rounded-lg px-3 py-2 transition-smooth hover:bg-black/10 text-black" onclick="closeMobileMenu()">
                               {label}
                             </a>
                           </li>
@@ -114,7 +121,7 @@ const links = NAV_LINKS;
                       </ul>
                     </>
                   ) : (
-                    <a href={href} class="block rounded-lg px-3 py-2 transition-smooth hover:bg-white/5 hover:text-gold" onclick="closeMobileMenu()">
+                    <a href={href} class="block rounded-lg px-3 py-2 transition-smooth hover:bg-black/10 text-black" onclick="closeMobileMenu()">
                       {label}
                     </a>
                   )}
@@ -124,7 +131,7 @@ const links = NAV_LINKS;
           </ul>
         </nav>
         <!-- Mobile Footer -->
-        <div class="border-t border-white/10 px-4 py-4 text-center text-xs text-tan/40">
+        <div class="border-t border-black/20 px-4 py-4 text-center text-xs text-black/60">
           © {new Date().getFullYear()} {siteData.name}
         </div>
       </div>
@@ -135,7 +142,12 @@ const links = NAV_LINKS;
 <script is:inline>
   function closeMobileMenu() {
     var panel = document.getElementById("nav-mobile-panel");
-    if(panel) panel.classList.add("hidden");
+    var backdrop = document.getElementById("nav-mobile-backdrop");
+    if(panel) panel.style.transform = "translateX(100%)";
+    if(backdrop) {
+      backdrop.style.opacity = "0";
+      backdrop.style.pointerEvents = "none";
+    }
     document.body.classList.remove("menu-open");
   }
   
@@ -143,25 +155,43 @@ const links = NAV_LINKS;
     var btn = document.getElementById("nav-menu-btn");
     var closeBtn = document.getElementById("nav-close-btn");
     var panel = document.getElementById("nav-mobile-panel");
+    var backdrop = document.getElementById("nav-mobile-backdrop");
     if (!btn || !panel || !closeBtn) return;
 
     function setOpen(open) {
-      panel.classList.toggle("hidden", !open);
-      btn.setAttribute("aria-expanded", open ? "true" : "false");
       if (open) {
+        panel.style.transform = "translateX(0)";
+        if(backdrop) {
+          backdrop.style.opacity = "1";
+          backdrop.style.pointerEvents = "auto";
+        }
+        btn.setAttribute("aria-expanded", "true");
         document.body.classList.add("menu-open");
       } else {
+        panel.style.transform = "translateX(100%)";
+        if(backdrop) {
+          backdrop.style.opacity = "0";
+          backdrop.style.pointerEvents = "none";
+        }
+        btn.setAttribute("aria-expanded", "false");
         document.body.classList.remove("menu-open");
       }
     }
 
     btn.addEventListener("click", function () {
-      setOpen(panel.classList.contains("hidden"));
+      var isOpen = panel.style.transform === "translateX(0)";
+      setOpen(!isOpen);
     });
 
     closeBtn.addEventListener("click", function () {
       setOpen(false);
     });
+    
+    if(backdrop) {
+      backdrop.addEventListener("click", function () {
+        setOpen(false);
+      });
+    }
 
     panel.querySelectorAll("a").forEach(function (a) {
       a.addEventListener("click", function () {
