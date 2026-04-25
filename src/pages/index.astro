@@ -16,14 +16,20 @@ const recentSpeeches = speeches.slice(0, 6);
 
   <!-- Hero Section -->
   <section class="relative min-h-[90vh] flex items-center">
-    <!-- Background Image (Mobile) -->
-    <div class="absolute inset-0 z-0 md:hidden">
-      <img src="/images/Hon_Musasiizi.png" alt="" class="w-full h-full object-cover opacity-15" />
-      <div class="absolute inset-0 bg-gradient-to-b from-[#1c1917] via-[#1f1b18]/90 to-[#1f1b18]"></div>
-    </div>
-    
     <div class="container mx-auto max-w-6xl px-4 sm:px-6 relative z-10">
-      <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-20">
+      <div class="grid items-center gap-6 lg:grid-cols-2 lg:gap-20">
+        <!-- Mobile Hero Image - shown before content on mobile -->
+        <div class="relative animate-fade-in delay-200 md:hidden order-first mb-4">
+          <div class="relative">
+            <img
+              src="/images/Hon_Musasiizi.png"
+              alt={siteData.name}
+              class="relative w-32 h-32 mx-auto rounded-full shadow-2xl border-2 border-gold/30"
+              style="aspect-ratio: 1; object-fit: cover;"
+            />
+          </div>
+        </div>
+        
         <div class="animate-fade-in">
           <span class="section-label">Official Portfolio</span>
           <h1 class="font-display text-4xl sm:text-5xl font-bold leading-tight md:text-6xl lg:text-7xl mt-2">
@@ -76,7 +82,7 @@ const recentSpeeches = speeches.slice(0, 6);
   <!-- Stats Section - visible on all screens -->
   <section class="py-10 sm:py-16">
     <div class="container mx-auto max-w-6xl px-3 sm:px-6">
-      <div class="grid grid-cols-4 gap-2 sm:gap-4">
+      <div class="grid grid-cols-2 gap-2 sm:gap-4">
         <div class="glass p-2 sm:p-6 text-center rounded-lg sm:rounded-xl">
           <p class="font-display text-sm sm:text-4xl font-bold text-gold">2011</p>
           <p class="mt-1 text-[10px] sm:text-sm text-tan/60">MP</p>
