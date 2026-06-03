@@ -625,6 +625,42 @@ p:last-child {
   z-index: 2;
 }
 
+/* Role titles beneath portrait */
+.hero__titles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  width: 100%;
+}
+
+.hero__title-line {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text);
+  text-align: center;
+  line-height: var(--leading-snug);
+  padding: var(--space-1) var(--space-4);
+  background: var(--color-accent-subtle);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: titleReveal 0.5s var(--ease-out) forwards;
+  animation-delay: calc(0.8s + var(--i, 0) * 0.15s);
+  width: 100%;
+  max-width: 360px;
+}
+
+@keyframes titleReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Coat of arms watermark behind portrait */
 .hero__crest {
   position: absolute;
@@ -904,6 +940,18 @@ p:last-child {
     width: 100%;
     max-width: 300px;
     text-align: center;
+  }
+  .hero__titles {
+    align-items: center;
+  }
+  .hero__title-line {
+    text-align: center;
+    border-left: none;
+    border-top: 2px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+    max-width: 280px;
+    font-size: var(--text-xs);
   }
   .stats-bar {
     grid-template-columns: repeat(2, 1fr);
