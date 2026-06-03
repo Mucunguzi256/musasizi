@@ -1,6 +1,6 @@
 export const siteData = {
   name: "Hon. Henry Ariganyira Musasizi",
-  title: "Minister of State for Finance (General Duties), Uganda",
+  title: "Minister of Finance, Planning and Economic Development",
   tagline: "Stewardship for inclusive growth, fiscal discipline, and shared prosperity.",
   email: "office@henrymusasizi.ug",
   /** Short line for headers */

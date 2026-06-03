@@ -4,9 +4,9 @@ import { siteData } from "../data/site";
 
 const keyRoles = [
   {
-    title: "Minister of State for Finance",
-    subtitle: "General Duties",
-    period: "2021 — Present",
+    title: "Minister of Finance",
+    subtitle: "Planning & Economic Development",
+    period: "2026 — Present",
     description: "Appointed by H.E. Yoweri Museveni to oversee financial management, budgeting, and economic policy coordination.",
   },
   {
@@ -33,6 +33,7 @@ const timeline = [
   { year: "2016", event: "Appointed Chairperson, Finance Committee" },
   { year: "2020", event: "Re-elected MP, Rubanda East — Third Term" },
   { year: "2021", event: "Appointed Minister of State for Finance (General Duties)" },
+  { year: "2026", event: "Promoted to Minister of Finance, Planning and Economic Development" },
   { year: "2025", event: "Re-elected MP, Rubanda East — Fourth Term" },
 ];
 
@@ -52,11 +53,23 @@ const education = [
 ];
 ---
 
-<BaseLayout title={`About | ${siteData.name}`} description={`Biography and public service overview for ${siteData.name}, Minister of State for Finance and MP for Rubanda East.`}>
+<BaseLayout title={`About | ${siteData.name}`} description={`Biography and public service overview for ${siteData.name}, Minister of Finance, Planning and Economic Development and MP for Rubanda East.`}>
   <!-- Hero -->
   <section class="hero" style="padding-bottom: var(--space-8);">
     <div class="hero__grid">
-      <div class="hero__portrait-wrapper animate-fade-in">
+      <div class="hero__content animate-fade-in">
+        <span class="section-label">Profile</span>
+        <h1 class="hero__name" style="font-size: var(--text-5xl);">About {siteData.name}</h1>
+        <div class="accent-divider"></div>
+        <p style="color: var(--color-muted); max-width: 520px;">
+          Born 25 February 1981 in Rubanda, Kabale District. CPA turned politician driving Uganda's economic transformation. MP for Rubanda East since 2011.
+        </p>
+        <p style="color: var(--color-muted); max-width: 520px;">
+          Promoted to Minister of Finance, Planning and Economic Development in 2026, having previously served as Minister of State for Finance (General Duties) since 2021. Former Chairperson of the Committee on Finance, Planning & Economic Development (2016–2021).
+        </p>
+      </div>
+
+      <div class="hero__portrait-wrapper animate-fade-in delay-200">
         <img
           src="/images/Hon_Musasiizi.png"
           alt={siteData.name}
@@ -65,17 +78,6 @@ const education = [
           height="420"
           style="aspect-ratio: 1; object-fit: cover;"
         />
-      </div>
-      <div class="hero__content animate-fade-in delay-200">
-        <span class="section-label">Profile</span>
-        <h1 class="hero__name" style="font-size: var(--text-5xl);">About {siteData.name}</h1>
-        <div class="accent-divider"></div>
-        <p style="color: var(--color-muted); max-width: 520px;">
-          Born 25 February 1981 in Rubanda, Kabale District. CPA turned politician driving Uganda's economic transformation. MP for Rubanda East since 2011.
-        </p>
-        <p style="color: var(--color-muted); max-width: 520px;">
-          Appointed State Minister for Finance (General Duties) by H.E. Yoweri Museveni in June 2021. Former Chairperson of the Committee on Finance, Planning & Economic Development (2016–2021).
-        </p>
       </div>
     </div>
   </section>
@@ -87,7 +89,7 @@ const education = [
       <h2 style="font-size: var(--text-3xl); font-weight: 500; margin-top: var(--space-1);">Public Service &amp; Leadership Journey</h2>
       <div class="accent-divider"></div>
       <div class="prose">
-        <p>Hon. Henry Ariganyira Musasizi (born 25 February 1981) is a distinguished Ugandan politician, certified public accountant, and business administrator. He has represented Rubanda East Constituency in the Parliament of Uganda since 2011 and currently serves as Minister of State for Finance, Planning and Economic Development (General Duties), a position he has held since 2021.</p>
+        <p>Hon. Henry Ariganyira Musasizi (born 25 February 1981) is a distinguished Ugandan politician, certified public accountant, and business administrator. He has represented Rubanda East Constituency in the Parliament of Uganda since 2011 and currently serves as Minister of Finance, Planning and Economic Development, having previously served as Minister of State for Finance (General Duties) since 2021.</p>
 
         <p>Before entering politics, Henry built a career in finance and accounting. He was a Partner at AHMHE Associates, Certified Public Accountants (2012–2015), and held roles at AMREF Uganda as Regional Accountant (2009–2010) and Project Accountant (2007–2009). He began his professional career as an Accountant at CARITAS Kabale Diocese (2006–2007).</p>
 
