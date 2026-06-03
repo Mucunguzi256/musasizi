@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionTitle from "../components/SectionTitle.astro";
+import XFeed from "../components/XFeed.astro";
 import { siteData } from "../data/site";
 
 const speeches = (await getCollection("speeches")).sort(
@@ -56,10 +57,8 @@ const posts = (await getCollection("blog"))
           height="420"
           style="aspect-ratio: 1; object-fit: cover;"
         />
-        <div class="hero__titles" id="hero-titles">
-          <span class="hero__title-line" data-text="Minister of Finance, Planning &amp; Economic Development"></span>
-          <span class="hero__title-line" data-text="MP Rubanda East"></span>
-          <span class="hero__title-line" data-text="NRM Chairperson, Rubanda District"></span>
+      <div class="hero__titles" id="hero-titles">
+          <span class="hero__title-line" id="hero-title-line"></span>
         </div>
       </div>
     </div>
@@ -176,6 +175,16 @@ const posts = (await getCollection("blog"))
     </section>
   )}
 
+  <!-- X Feed -->
+  <section class="section">
+    <div class="container">
+      <SectionTitle eyebrow="Social" title="Latest from X" description={`Follow @${siteData.xHandle} for real-time updates.`} />
+      <div style="max-width: 540px; margin: 0 auto;">
+        <XFeed />
+      </div>
+    </div>
+  </section>
+
   <!-- Contact CTA -->
   <section class="section">
     <div class="container--narrow" style="max-width: var(--container-narrow); margin: 0 auto; padding: var(--space-6); text-align: center;">
@@ -192,84 +201,57 @@ const posts = (await getCollection("blog"))
 
 <script>
   (function () {
-    var container = document.getElementById("hero-titles");
-    if (!container) return;
+    var el = document.getElementById("hero-title-line");
+    if (!el) return;
 
-    var lines = container.querySelectorAll(".hero__title-line");
-    if (!lines.length) return;
-
-    var texts = Array.from(lines).map(function (el) { return el.dataset.text || ""; });
-    var phase = 0; // 0=typing line1, 1=typing line2, 2=typing line3, 3=pause, 4=deleting all
+    var texts = [
+      "Minister for Finance",
+      "MP Rubanda East",
+      "NRM Chairperson, Rubanda District"
+    ];
+    var textIndex = 0;
     var charIndex = 0;
-    var deletingLine = 2; // delete from bottom up
+    var typing = true; // true = typing forward, false = deleting
 
     function tick() {
-      // --- TYPING PHASES ---
-      if (phase < 3) {
-        var el = lines[phase];
-        var full = texts[phase];
-        if (charIndex === 0) el.classList.add("typing");
+      var full = texts[textIndex];
 
+      if (typing) {
+        // TYPE
+        el.classList.add("typing");
         charIndex++;
         el.textContent = full.slice(0, charIndex);
 
         if (charIndex >= full.length) {
+          // Done typing — pause
           el.classList.remove("typing");
-          charIndex = 0;
-          phase++;
-          if (phase === 3) {
-            // All three typed — pause then delete
-            setTimeout(tick, 3000);
-            return;
-          }
+          typing = false;
+          setTimeout(tick, 2500);
+          return;
         }
-
-        var speed = 50 + Math.random() * 40;
+        var speed = 40 + Math.random() * 30;
         setTimeout(tick, speed);
         return;
       }
 
-      // --- PAUSE PHASE (handled above with setTimeout) ---
+      // DELETE
+      el.classList.add("typing");
+      charIndex--;
+      el.textContent = full.slice(0, charIndex);
 
-      // --- DELETING PHASE ---
-      if (phase === 3) {
-        // Start deleting from bottom line
-        deletingLine = 2;
-        lines[deletingLine].classList.add("typing");
-        phase = 4;
-      }
-
-      if (phase === 4) {
-        var el = lines[deletingLine];
-        var full = texts[deletingLine];
-        var current = el.textContent.length;
-
-        if (current > 0) {
-          el.textContent = full.slice(0, current - 1);
-          setTimeout(tick, 15);
-          return;
-        }
-
-        // This line fully deleted
+      if (charIndex <= 0) {
+        // Done deleting — next text
         el.classList.remove("typing");
-        deletingLine--;
-
-        if (deletingLine < 0) {
-          // All lines deleted — restart
-          lines.forEach(function (l) { l.textContent = ""; });
-          phase = 0;
-          charIndex = 0;
-          setTimeout(tick, 300);
-          return;
-        }
-
-        lines[deletingLine].classList.add("typing");
-        setTimeout(tick, 10);
+        el.textContent = "";
+        typing = true;
+        textIndex = (textIndex + 1) % texts.length;
+        setTimeout(tick, 400);
         return;
       }
+
+      setTimeout(tick, 12);
     }
 
-    // Start after page load delay
     setTimeout(tick, 800);
   })();
 </script>

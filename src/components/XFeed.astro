@@ -1,0 +1,57 @@
+---
+// X / Twitter Timeline Embed
+// Requires handle in siteData.xHandle
+import { siteData } from "../data/site";
+---
+
+<div class="x-feed">
+  <a
+    class="twitter-timeline"
+    data-height="600"
+    data-tweet-limit="5"
+    data-chrome="noheader nofooter noborders transparent"
+    data-theme="light"
+    href={`https://x.com/${siteData.xHandle}`}
+  >
+    Follow @siteData.xHandle} on X
+  </a>
+</div>
+
+<style>
+  .x-feed {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+  .x-feed .twitter-timeline {
+    width: 100% !important;
+  }
+  /* If X JS hasn't loaded, show a clean fallback link */
+  .x-feed a:only-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-6);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  // Load Twitter/X embed script
+  const scriptId = "twitter-wjs";
+  if (!document.getElementById(scriptId)) {
+    const script = document.createElement("script");
+    script.id = scriptId;
+    script.src = "https://platform.twitter.com/widgets.js";
+    script.async = true;
+    script.charset = "utf-8";
+    document.head.appendChild(script);
+  } else if (window.twttr?.widgets?.load) {
+    window.twttr.widgets.load();
+  }
+</script>
