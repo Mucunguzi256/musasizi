@@ -906,15 +906,15 @@ p:last-child {
 
 .footer__heading {
   font-size: var(--text-xs);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
-  color: var(--color-muted);
+  color: var(--color-text);
   margin-bottom: var(--space-3);
 }
 
 .footer__heading + .footer__heading {
-  margin-top: var(--space-6);
+  margin-top: var(--space-5);
 }
 
 .footer__links {
@@ -922,6 +922,8 @@ p:last-child {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+  margin: 0;
+  padding: 0;
 }
 
 .footer__links a {
@@ -1072,6 +1074,11 @@ p:last-child {
     text-align: left;
     margin-bottom: var(--space-2);
     font-size: 10px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+  .footer__heading + .footer__heading {
+    margin-top: var(--space-4);
   }
   .footer__links {
     align-items: flex-start;
@@ -1166,7 +1173,12 @@ p:last-child {
   .footer__heading {
     text-align: center;
     font-size: 10px;
-    margin-bottom: var(--space-1);
+    margin-bottom: var(--space-2);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+  .footer__heading + .footer__heading {
+    margin-top: var(--space-4);
   }
   .footer__links {
     align-items: center;
