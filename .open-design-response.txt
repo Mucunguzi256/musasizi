@@ -1,0 +1,24 @@
+I read this as an exploratory-design task — a comprehensive design audit and redesign proposal for a political figure site. The brief is exceptionally detailed (12 audit criteria, brand identity, audience, color palette, stack) so most discovery questions are self-answered. I'll proceed directly to exploration and deliver the full markdown document.
+
+Let me first understand the current codebase by exploring it in parallel, then synthesize the audit.Let me fetch the live site to verify issues and gather additional audit data, and also look at the design systems directory and brand spec for relevant patterns.Let me examine some relevant design system patterns from the library for reference.The full proposal has been written to `henry-musasizi-design-proposal.md` in the project root. Here's the summary:
+
+## What's in the document
+
+**Section 1 — Full Design Audit** catalogs 18 specific issues across 6 categories (visual identity, navigation, content pages, hero, contact, performance) with severity ratings. 6 critical, 8 high, 4 medium.
+
+**Section 2 — Design System** defines the complete new system, moving from dark/tech to warm editorial:
+- 6 OKLch surface/token colors + 5 semantic colors with contrast ratios documented
+- 2 font families (Newsreader display + Inter body) down from 6
+- Fluid `clamp()` type scale from xs (11-12px) to 7xl (42-88px)
+- Full spacing, radius, shadow, and transition token set
+- Tailwind config mapping for Astro integration
+
+**Section 3 — Layout Architecture** proposes a statesman bento grid with type-specific visual weights per section, shifting from the current "everything is a card" pattern.
+
+**Sections 4-7** provide detailed component designs with actual Astro component code and CSS: hero (portrait + Coat of Arms + hierarchical tagline), speech/policy/project/gallery page templates, about page with alternating timeline, and a validated contact form with proper UX states.
+
+**Sections 8-9** cover responsive strategy (3 breakpoint tiers with per-component behavior) and a full accessibility checklist (11 requirements, each with specific implementations) plus a performance budget with 6 metrics.
+
+**Section 10** outlines an 8-phase, ~15-19 day migration path with files to create, files to remove, and implementation order.
+
+The site wasn't reachable for live verification, so the audit is based entirely on the brief's description of current issues. If you're able to provide screenshots, a repo clone, or access to the Decap CMS config, I can refine the audit with specific code-level findings.

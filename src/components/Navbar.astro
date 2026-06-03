@@ -2,208 +2,74 @@
 import { NAV_LINKS } from "../config/navigation";
 import { siteData } from "../data/site";
 
-const links = NAV_LINKS;
+const links = NAV_LINKS.flatMap((link) =>
+  link.children ? [link, ...link.children] : [link]
+);
 ---
 
-<header class="navbar">
-  <div class="container mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-    <!-- Logo + Site Name -->
-    <a href="/" class="flex items-center gap-2">
-      <img src="/images/Hon_Musasiizi.png" alt="Logo" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover" />
-      <span class="font-display text-sm sm:text-lg font-bold">Hon. Musasizi</span>
+<header class="navbar" id="navbar">
+  <div class="navbar__inner">
+    <a href="/" class="navbar__brand">
+      <img src="/images/Hon_Musasiizi.png" alt="" class="navbar__logo" width="36" height="36" />
+      <div>
+        <span class="navbar__brand-text">Hon. Musasizi</span>
+        <span class="navbar__brand-sub">Minister of State for Finance</span>
+      </div>
     </a>
 
-    <nav class="hidden items-center md:flex" aria-label="Primary">
-      <ul class="flex flex-wrap items-center justify-end gap-6 text-sm font-medium">
-        {
-          links.map(({ href, label, children }) => (
-            <li class="relative group">
-              {children ? (
-                <>
-                  <button
-                    type="button"
-                    class="flex items-center gap-1 transition-smooth hover:text-gold"
-                  >
-                    {label}
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  <div class="absolute right-0 top-full mt-2 hidden w-44 rounded-xl glass py-2 group-hover:block">
-                    <ul class="flex flex-col">
-                      {children.map(({ href, label }) => (
-                        <li>
-                          <a href={href} class="block px-4 py-2 transition-smooth hover:bg-white/5 hover:text-gold">
-                            {label}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </>
-              ) : (
-                <a href={href} class="transition-smooth hover:text-gold">
-                  {label}
-                </a>
-              )}
-            </li>
-          ))
-        }
-      </ul>
+    <nav aria-label="Primary" class="navbar__links">
+      {links.map(({ href, label }) => (
+        <a
+          href={href}
+          class:list={{
+            navbar__cta: label === "Contact",
+          }}
+        >
+          {label}
+        </a>
+      ))}
     </nav>
 
-    <!-- Mobile Hamburger -->
     <button
       type="button"
-      class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#c8922a] md:hidden"
-      id="nav-menu-btn"
-      aria-controls="nav-mobile-panel"
+      class="navbar__toggle"
+      id="nav-toggle"
+      aria-controls="nav-mobile"
       aria-expanded="false"
-      aria-label="Open menu"
+      aria-label="Toggle menu"
     >
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" aria-hidden="true">
-        <path d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
+  </div>
 
-    <!-- Mobile Slide-in Panel (50% width, 50-60% height from right) -->
-    <!-- Backdrop overlay for left 50% -->
-    <div
-      id="nav-mobile-backdrop"
-      class="fixed left-0 top-0 w-[50%] h-[50dvh] bg-black/40 md:hidden"
-      style="z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;"
-    ></div>
-    <!-- Slide-in Panel -->
-    <div
-      id="nav-mobile-panel"
-      class="fixed top-0 right-0 w-[50%] md:hidden overflow-y-auto"
-      style="z-index: 1000; height: 50dvh; max-height: 60dvh; background: linear-gradient(135deg, #c8922a 0%, #a67c1f 100%) !important; transform: translateX(100%); transition: transform 0.3s ease; border-radius: 0 0 0 16px;"
-      role="dialog"
-      aria-label="Mobile navigation"
-    >
-      <div class="flex flex-col h-full text-black">
-        <!-- Mobile Header -->
-        <div class="flex items-center justify-between border-b border-black/20 px-4 py-3">
-          <a href="/" class="flex items-center gap-2" onclick="closeMobileMenu()">
-            <img src="/images/Hon_Musasiizi.png" alt="Logo" class="w-10 h-10 rounded-full object-cover" />
-            <span class="font-display text-lg font-bold text-black">Hon. Musasizi</span>
-          </a>
-          <button
-            type="button"
-            class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-black/10"
-            id="nav-close-btn"
-            aria-label="Close menu"
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12"></path>
-            </svg>
-          </button>
-        </div>
-        <!-- Mobile Nav Links -->
-        <nav class="flex-1 overflow-y-auto px-4 py-2">
-          <ul class="flex flex-col gap-0 text-base font-medium">
-            {
-              links.map(({ href, label, children }) => (
-                <li>
-                  {children ? (
-                    <>
-                      <div class="border-b border-black/20 pb-2 mb-2">
-                        <span class="text-sm text-black/70">{label}</span>
-                      </div>
-                      <ul class="mt-2 flex flex-col gap-0 pl-2">
-                        {children.map(({ href, label }) => (
-                          <li>
-                            <a href={href} class="block rounded-lg px-3 py-2 transition-smooth hover:bg-black/10 text-black" onclick="closeMobileMenu()">
-                              {label}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : (
-                    <a href={href} class="block rounded-lg px-3 py-2 transition-smooth hover:bg-black/10 text-black" onclick="closeMobileMenu()">
-                      {label}
-                    </a>
-                  )}
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
-        <!-- Mobile Footer -->
-        <div class="border-t border-black/20 px-4 py-4 text-center text-xs text-black/60">
-          © {new Date().getFullYear()} {siteData.name}
-        </div>
-      </div>
-    </div>
+  <div class="navbar__mobile" id="nav-mobile">
+    {links.map(({ href, label }) => (
+      <a href={href}>{label}</a>
+    ))}
   </div>
 </header>
 
-<script is:inline>
-  function closeMobileMenu() {
-    var panel = document.getElementById("nav-mobile-panel");
-    var backdrop = document.getElementById("nav-mobile-backdrop");
-    if(panel) panel.style.transform = "translateX(100%)";
-    if(backdrop) {
-      backdrop.style.opacity = "0";
-      backdrop.style.pointerEvents = "none";
-    }
-    document.body.classList.remove("menu-open");
+<script>
+  const toggle = document.getElementById("nav-toggle");
+  const panel = document.getElementById("nav-mobile");
+
+  if (toggle && panel) {
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!expanded));
+      panel.classList.toggle("open", !expanded);
+      document.body.style.overflow = expanded ? "" : "hidden";
+    });
+
+    // Close on link click
+    panel.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        toggle.setAttribute("aria-expanded", "false");
+        panel.classList.remove("open");
+        document.body.style.overflow = "";
+      });
+    });
   }
-  
-  (function() {
-    var btn = document.getElementById("nav-menu-btn");
-    var closeBtn = document.getElementById("nav-close-btn");
-    var panel = document.getElementById("nav-mobile-panel");
-    var backdrop = document.getElementById("nav-mobile-backdrop");
-    if (!btn || !panel || !closeBtn) return;
-
-    function setOpen(open) {
-      if (open) {
-        panel.style.transform = "translateX(0)";
-        if(backdrop) {
-          backdrop.style.opacity = "1";
-          backdrop.style.pointerEvents = "auto";
-        }
-        btn.setAttribute("aria-expanded", "true");
-        document.body.classList.add("menu-open");
-      } else {
-        panel.style.transform = "translateX(100%)";
-        if(backdrop) {
-          backdrop.style.opacity = "0";
-          backdrop.style.pointerEvents = "none";
-        }
-        btn.setAttribute("aria-expanded", "false");
-        document.body.classList.remove("menu-open");
-      }
-    }
-
-    btn.addEventListener("click", function () {
-      var isOpen = panel.style.transform === "translateX(0)";
-      setOpen(!isOpen);
-    });
-
-    closeBtn.addEventListener("click", function () {
-      setOpen(false);
-    });
-    
-    if(backdrop) {
-      backdrop.addEventListener("click", function () {
-        setOpen(false);
-      });
-    }
-
-    panel.querySelectorAll("a").forEach(function (a) {
-      a.addEventListener("click", function () {
-        setOpen(false);
-      });
-    });
-  })();
 </script>
-
-<style is:global>
-  body.menu-open {
-    overflow: hidden;
-    height: 100vh;
-  }
-</style>

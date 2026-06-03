@@ -1,186 +1,186 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Navbar from "../components/Navbar.astro";
 import SectionTitle from "../components/SectionTitle.astro";
 import { siteData } from "../data/site";
 
 const speeches = (await getCollection("speeches")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
-const recentSpeeches = speeches.slice(0, 6);
+const recentSpeeches = speeches.slice(0, 3);
+
+const projects = await getCollection("projects");
+const ongoingProjects = projects.filter((p) => p.data.status !== "Completed").slice(0, 3);
+
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
 ---
 
-<BaseLayout title={`${siteData.name} | Portfolio`} description={siteData.tagline}>
-  <Navbar slot="navbar" />
-
+<BaseLayout title={`${siteData.name} — Official Portfolio`} description={siteData.tagline}>
   <!-- Hero Section -->
-  <section class="relative min-h-[90vh] flex items-center">
-    <div class="container mx-auto max-w-6xl px-4 sm:px-6 relative z-10">
-      <div class="grid items-center gap-6 lg:grid-cols-2 lg:gap-20">
-        <!-- Mobile Hero Image - shown before content on mobile -->
-        <div class="relative animate-fade-in delay-200 md:hidden order-first mb-4">
-          <div class="relative">
-            <img
-              src="/images/Hon_Musasiizi.png"
-              alt={siteData.name}
-              class="relative w-32 h-32 mx-auto rounded-full shadow-2xl border-2 border-gold/30"
-              style="aspect-ratio: 1; object-fit: cover;"
-            />
-          </div>
+  <section class="hero">
+    <div class="hero__grid">
+      <div class="hero__portrait-wrapper animate-fade-in">
+        <div class="hero__crest" aria-hidden="true">
+          <!-- Uganda Coat of Arms SVG watermark -->
+          <svg viewBox="0 0 500 500" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M250 30L310 120H190L250 30Z" />
+            <path d="M250 60L180 170H320L250 60Z" />
+            <path d="M150 200L250 350L350 200H150Z" />
+            <path d="M120 250L250 430L380 250H120Z" />
+            <circle cx="250" cy="260" r="60" />
+            <path d="M200 260L235 290L300 240" stroke="currentColor" stroke-width="8" fill="none" />
+          </svg>
         </div>
-        
-        <div class="animate-fade-in">
-          <span class="section-label">Official Portfolio</span>
-          <h1 class="font-display text-4xl sm:text-5xl font-bold leading-tight md:text-6xl lg:text-7xl mt-2">
-            {siteData.name}
-          </h1>
-          
-          <div class="mt-6 sm:mt-8 h-[2px] w-24 rounded-full bg-gradient-to-r from-gold to-transparent"></div>
-          
-          <p class="mt-4 sm:mt-6 text-base sm:text-lg text-tan/70 max-w-xl leading-relaxed">
-            CPA turned politician driving Uganda's economic transformation as 
-            <span class="text-gold font-semibold">Minister of State for Finance</span> (General Duties). 
-            MP for Rubanda East since 2011.
-          </p>
-          
-          <div class="mt-8 sm:mt-10 flex flex-wrap gap-3 sm:gap-4">
-            <a href="/about" class="btn-primary text-sm sm:text-base">
-              More About Henry
-              <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
-            <a href="/speeches" class="btn-secondary text-sm sm:text-base">
-              Speeches
-            </a>
-          </div>
-        </div>
-        
-        <!-- Desktop Hero Image -->
-        <div class="relative animate-fade-in delay-200 hidden md:block">
-          <div class="relative">
-            <img
-              src="/images/Hon_Musasiizi.png"
-              alt={siteData.name}
-              class="relative w-full max-w-md mx-auto rounded-2xl shadow-2xl"
-              style="aspect-ratio: 1; object-fit: cover;"
-            />
-          </div>
-        </div>
-      </div>
-      
-      <!-- Scroll indicator -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
-        <svg class="w-6 h-6 text-tan/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-        </svg>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats Section - visible on all screens -->
-  <section class="py-10 sm:py-16">
-    <div class="container mx-auto max-w-6xl px-3 sm:px-6">
-      <div class="grid grid-cols-2 gap-2 sm:gap-4">
-        <div class="glass p-2 sm:p-6 text-center rounded-lg sm:rounded-xl">
-          <p class="font-display text-sm sm:text-4xl font-bold text-gold">2011</p>
-          <p class="mt-1 text-[10px] sm:text-sm text-tan/60">MP</p>
-        </div>
-        <div class="glass p-2 sm:p-6 text-center rounded-lg sm:rounded-xl">
-          <p class="font-display text-sm sm:text-4xl font-bold text-gold">2021</p>
-          <p class="mt-1 text-[10px] sm:text-sm text-tan/60">Minister</p>
-        </div>
-        <div class="glass p-2 sm:p-6 text-center rounded-lg sm:rounded-xl">
-          <p class="font-display text-sm sm:text-4xl font-bold text-gold">10+</p>
-          <p class="mt-1 text-[10px] sm:text-sm text-tan/60">Years</p>
-        </div>
-        <div class="glass p-2 sm:p-6 text-center rounded-lg sm:rounded-xl">
-          <p class="font-display text-sm sm:text-4xl font-bold text-gold">$500B</p>
-          <p class="mt-1 text-[10px] sm:text-sm text-tan/60">GDP</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Recent Speeches -->
-  <section class="section">
-    <div class="container mx-auto max-w-6xl px-4 sm:px-6">
-      <div class="glass-card p-6 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl">
-        <SectionTitle
-          eyebrow="Latest"
-          title="Recent Speeches & Statements"
-          description="Policy remarks and public statements."
+        <img
+          src="/images/Hon_Musasiizi.png"
+          alt={siteData.name}
+          class="hero__portrait"
+          width="420"
+          height="420"
+          style="aspect-ratio: 1; object-fit: cover;"
         />
-        
-        <div class="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3 mt-8 sm:mt-10">
-          {
-            recentSpeeches.map((speech) => (
-              <a href={`/speeches/${speech.slug}/`} class="glass p-4 sm:p-5 rounded-xl transition-smooth group hover:border-gold/30">
-                <span class="date-badge text-xs">{speech.data.date.toLocaleDateString("en-UG")}</span>
-                <h3 class="mt-2 sm:mt-3 text-base sm:text-lg font-semibold text-tan group-hover:text-gold transition-smooth">
-                  {speech.data.title}
-                </h3>
-                <p class="mt-1 sm:mt-2 text-xs sm:text-sm text-tan/50">{speech.data.location ?? "Uganda"}</p>
-              </a>
-            ))
-          }
-        </div>
-        
-        <div class="mt-8 sm:mt-10 flex justify-center">
-          <a href="/speeches" class="btn-secondary text-sm sm:text-base">
-            View All Speeches
-            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
+      </div>
+
+      <div class="hero__content animate-fade-in delay-200">
+        <span class="hero__role">Official Portfolio</span>
+        <h1 class="hero__name">{siteData.name}</h1>
+        <p class="hero__title">{siteData.title}</p>
+        <p class="hero__motto">"{siteData.tagline}"</p>
+        <div class="hero__actions">
+          <a href="/about" class="btn btn--primary">
+            Full Biography
+          </a>
+          <a href="/speeches" class="btn btn--outline">
+            Speeches & Statements
           </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section class="section pb-16 sm:pb-24">
-    <div class="container mx-auto max-w-3xl px-4 sm:px-6">
-      <div class="text-center mb-8 sm:mb-12">
-        <span class="section-label">Contact</span>
-        <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold">Get in Touch</h2>
-      </div>
-      
-      <div class="glass-card p-6 sm:p-8 rounded-2xl">
-        <form class="space-y-4 sm:space-y-6">
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs text-tan/60 mb-2">Name</label>
-              <input type="text" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-tan placeholder:text-tan/30 focus:border-gold/50 focus:outline-none" placeholder="Your name" />
-            </div>
-            <div>
-              <label class="block text-xs text-tan/60 mb-2">Email</label>
-              <input type="email" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-tan placeholder:text-tan/30 focus:border-gold/50 focus:outline-none" placeholder="your@email.com" />
-            </div>
-          </div>
-          <div>
-            <label class="block text-xs text-tan/60 mb-2">Subject</label>
-            <input type="text" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-tan placeholder:text-tan/30 focus:border-gold/50 focus:outline-none" placeholder="Subject" />
-          </div>
-          <div>
-            <label class="block text-xs text-tan/60 mb-2">Message</label>
-            <textarea rows="4" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-tan placeholder:text-tan/30 focus:border-gold/50 focus:outline-none resize-none" placeholder="Your message..."></textarea>
-          </div>
-          <button type="submit" class="btn-primary w-full">
-            Send Message
-          </button>
-        </form>
-        
-        <div class="mt-8 pt-6 border-t border-white/10 text-center">
-          <p class="text-sm text-tan/60 mb-3">Or reach out directly:</p>
-          <div class="flex flex-col sm:flex-row justify-center gap-4 text-sm">
-            <a href="mailto:office@henrymusasizi.ug" class="text-gold hover:underline">office@henrymusasizi.ug</a>
-            <span class="hidden sm:inline text-tan/30">|</span>
-            <a href="https://x.com/henrymusasizi1" target="_blank" class="text-gold hover:underline">@henrymusasizi1</a>
-          </div>
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-item animate-fade-in delay-100">
+      <p class="stat-item__number">2011</p>
+      <p class="stat-item__label">MP Rubanda East</p>
+    </div>
+    <div class="stat-item animate-fade-in delay-200">
+      <p class="stat-item__number">4</p>
+      <p class="stat-item__label">Terms Served</p>
+    </div>
+    <div class="stat-item animate-fade-in delay-300">
+      <p class="stat-item__number">2021</p>
+      <p class="stat-item__label">Appointed Minister</p>
+    </div>
+    <div class="stat-item animate-fade-in delay-400">
+      <p class="stat-item__number">15+</p>
+      <p class="stat-item__label">Development Projects</p>
+    </div>
+  </div>
+
+  <!-- About Snap + Quick Links (Bento) -->
+  <section class="section">
+    <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--space-6); max-width: var(--container); margin: 0 auto; padding: 0 var(--space-6);">
+      <div class="card animate-fade-in" style="grid-column: span 12; --delay: 0.1s;">
+        <span class="section-label">About</span>
+        <h2 style="font-size: var(--text-3xl); font-weight: 500; margin-top: var(--space-2);">Public Service &amp; Leadership</h2>
+        <div class="accent-divider"></div>
+        <p style="font-size: var(--text-base); color: var(--color-muted); max-width: 640px; line-height: var(--leading-relaxed);">
+          Hon. Henry Ariganyira Musasizi is a Ugandan politician, certified public accountant, and MBA graduate serving as Minister of State for Finance, Planning and Economic Development (General Duties). He has represented Rubanda East Constituency since 2011.
+        </p>
+        <div style="margin-top: var(--space-4);">
+          <a href="/about" class="btn btn--outline">Read Full Biography</a>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Featured Speech -->
+  {recentSpeeches.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <SectionTitle eyebrow="Latest" title="Recent Speeches" description="Official remarks and policy statements." />
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-6);">
+          {recentSpeeches.map((speech) => (
+            <article class="card animate-fade-in">
+              <span class="date-badge">{speech.data.date.toLocaleDateString("en-UG")}</span>
+              <h3 style="font-size: var(--text-lg); margin-top: var(--space-3);">{speech.data.title}</h3>
+              <p style="font-size: var(--text-sm); color: var(--color-muted); margin-top: var(--space-1);">{speech.data.location ?? "Uganda"}</p>
+              <a href={`/speeches/${speech.slug}/`} style="display: inline-block; margin-top: var(--space-4); font-size: var(--text-sm); font-weight: 600;">
+                Read full text →
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Development Projects -->
+  {ongoingProjects.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <SectionTitle eyebrow="Delivery" title="Development Projects" description="Tracking progress across Uganda." />
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-6);">
+          {ongoingProjects.map((project) => (
+            <article class="card animate-fade-in">
+              <span class="date-badge">{project.data.district}</span>
+              <h3 style="font-size: var(--text-lg); margin-top: var(--space-3);">{project.data.title}</h3>
+              <p style="font-size: var(--text-sm); color: var(--color-muted); margin-top: var(--space-2);">Status: {project.data.status}</p>
+              <a href={`/projects/${project.slug}/`} style="display: inline-block; margin-top: var(--space-4); font-size: var(--text-sm); font-weight: 600;">
+                Project details →
+              </a>
+            </article>
+          ))}
+        </div>
+        <div style="text-align: center; margin-top: var(--space-8);">
+          <a href="/projects" class="btn btn--outline">View All Projects</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Latest News -->
+  {posts.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <SectionTitle eyebrow="News" title="Latest Updates" description="News, policy analysis, and announcements." />
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-6);">
+          {posts.map((post) => (
+            <article class="card animate-fade-in">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="date-badge">{post.data.date.toLocaleDateString("en-UG")}</span>
+                <span style="font-size: var(--text-xs); font-weight: 600; color: var(--color-accent);">{post.data.category}</span>
+              </div>
+              <h3 style="font-size: var(--text-lg); margin-top: var(--space-3);">{post.data.title}</h3>
+              {post.data.excerpt && (
+                <p style="font-size: var(--text-sm); color: var(--color-muted); margin-top: var(--space-2);">{post.data.excerpt}</p>
+              )}
+              <a href={`/blog/${post.slug}/`} style="display: inline-block; margin-top: var(--space-4); font-size: var(--text-sm); font-weight: 600;">
+                Read full story →
+              </a>
+            </article>
+          ))}
+        </div>
+        <div style="text-align: center; margin-top: var(--space-8);">
+          <a href="/blog" class="btn btn--outline">All News</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Contact CTA -->
+  <section class="section">
+    <div class="container--narrow" style="max-width: var(--container-narrow); margin: 0 auto; padding: var(--space-6); text-align: center;">
+      <span class="section-label">Reach Out</span>
+      <h2 style="font-size: var(--text-3xl); font-weight: 500; margin-top: var(--space-2);">Get in Touch</h2>
+      <div class="accent-divider" style="margin: var(--space-3) auto var(--space-6);"></div>
+      <p style="color: var(--color-muted); margin-bottom: var(--space-6);">
+        Contact the Minister's office for constituency services, media inquiries, or policy matters.
+      </p>
+      <a href="/contact" class="btn btn--primary">Contact Office</a>
     </div>
   </section>
 </BaseLayout>

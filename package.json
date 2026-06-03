@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@astrojs/tailwind": "^6.0.0",
+    "@fontsource/dm-sans": "^5.2.8",
     "@fontsource/inter": "^5.1.0",
     "@fontsource/jetbrains-mono": "^5.1.0",
     "@types/node": "^22.0.0",

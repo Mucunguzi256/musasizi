@@ -6,27 +6,27 @@ import SectionTitle from "../../components/SectionTitle.astro";
 const projects = await getCollection("projects");
 ---
 
-<BaseLayout title="Development Projects | Hon. Henry Musasizi">
-  <section class="container mx-auto max-w-6xl px-6 py-10 md:py-16">
-    <div class="card p-6 sm:p-8 md:p-10">
+<BaseLayout title="Development Projects | Hon. Henry Musasizi" description="Tracking implementation progress of priority development projects across Uganda.">
+  <section class="section">
+    <div class="container">
       <SectionTitle
         eyebrow="Delivery"
         title="Development Projects"
         description="Tracking implementation progress of priority projects across Uganda."
       />
-      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {
-          projects.map((project) => (
-            <article class="card flex flex-col p-5 sm:p-6">
-              <span class="date-badge">{project.data.district}</span>
-              <h3 class="mt-3 text-lg font-bold text-coffee">{project.data.title}</h3>
-              <p class="mt-2 text-sm text-[#2C2C2C]/80">Status: {project.data.status}</p>
-              <a class="mt-auto pt-5 text-sm font-semibold" href={`/projects/${project.slug}/`}>
-                Project details →
-              </a>
-            </article>
-          ))
-        }
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-5);">
+        {projects.map((project) => (
+          <article class="card" style="display: flex; flex-direction: column;">
+            <span class="date-badge">{project.data.district}</span>
+            <h3 style="font-size: var(--text-lg); font-weight: 500; margin-top: var(--space-3);">{project.data.title}</h3>
+            <p style="font-size: var(--text-sm); color: var(--color-muted); margin-top: var(--space-2);">
+              Status: {project.data.status}
+            </p>
+            <a href={`/projects/${project.slug}/`} style="margin-top: auto; padding-top: var(--space-5); font-size: var(--text-sm); font-weight: 600;">
+              Project details →
+            </a>
+          </article>
+        ))}
       </div>
     </div>
   </section>

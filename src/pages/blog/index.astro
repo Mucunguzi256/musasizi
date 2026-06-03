@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Navbar from "../../components/Navbar.astro";
 import SectionTitle from "../../components/SectionTitle.astro";
 import { siteData } from "../../data/site";
 
@@ -12,41 +11,41 @@ const posts = (await getCollection("blog")).sort(
 const categories = ["All", "Speeches", "Policy", "Economic Updates", "Constituency Projects"];
 ---
 
-<BaseLayout title={`Blog | ${siteData.name}`} description="Latest news, policy updates, and speeches.">
-  <Navbar slot="navbar" />
-
-  <section class="container mx-auto max-w-6xl px-6 py-10 md:py-16">
-    <div class="card p-6 sm:p-8 md:p-10">
+<BaseLayout title={`News | ${siteData.name}`} description="Latest news, policy updates, and announcements.">
+  <section class="section">
+    <div class="container">
       <SectionTitle
         eyebrow="News"
         title="Blog & Updates"
-        description="Latest news articles, policy analysis, and speeches."
+        description="Latest news articles, policy analysis, and announcements."
       />
 
-      <div class="mt-8 flex flex-wrap gap-2">
+      <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-6);">
         {categories.map((cat) => (
-          <a href={`#${cat.toLowerCase().replace(" ", "-")}`} class="btn-outline-gold text-sm">
+          <a href={`#${cat.toLowerCase().replace(" ", "-")}`} class="btn btn--ghost" style="font-size: var(--text-xs);">
             {cat}
           </a>
         ))}
       </div>
 
-      <div class="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-5); margin-top: var(--space-8);">
         {posts.map((post) => (
-          <article class="card flex flex-col p-5 sm:p-6">
-            <div class="flex items-center justify-between">
+          <article class="card" style="display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
               <span class="date-badge">{post.data.date.toLocaleDateString("en-UG")}</span>
-              <span class="text-xs font-medium text-[#C8922A]">{post.data.category}</span>
+              <span style="font-size: var(--text-xs); font-weight: 600; color: var(--color-accent);">{post.data.category}</span>
             </div>
-            <h3 class="mt-3 text-lg font-bold text-coffee">{post.data.title}</h3>
-            <p class="mt-2 text-sm text-[#2C2C2C]/80">{post.data.excerpt}</p>
-            <div class="mt-auto flex items-center gap-4 pt-5">
-              <a class="text-sm font-semibold" href={`/blog/${post.slug}/`}>
+            <h3 style="font-size: var(--text-lg); font-weight: 500; margin-top: var(--space-3);">{post.data.title}</h3>
+            {post.data.excerpt && (
+              <p style="font-size: var(--text-sm); color: var(--color-muted); margin-top: var(--space-2);">{post.data.excerpt}</p>
+            )}
+            <div style="margin-top: auto; display: flex; align-items: center; gap: var(--space-4); padding-top: var(--space-5);">
+              <a href={`/blog/${post.slug}/`} style="font-size: var(--text-sm); font-weight: 600;">
                 Read full story →
               </a>
-              <div class="flex gap-2">
-                <a href={`https://x.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${siteData.url}/blog/${post.slug}/`} target="_blank" class="text-sm text-gray-500 hover:text-[#1DA1F2]">X</a>
-                <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${siteData.url}/blog/${post.slug}/`} target="_blank" class="text-sm text-gray-500 hover:text-[#0077B5]">LinkedIn</a>
+              <div style="display: flex; gap: var(--space-2); margin-left: auto;">
+                <a href={`https://x.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=https://henrymusasizi.ug/blog/${post.slug}/`} target="_blank" rel="noopener noreferrer" style="font-size: var(--text-xs); color: var(--color-muted);">X</a>
+                <a href={`https://www.linkedin.com/shareArticle?mini=true&url=https://henrymusasizi.ug/blog/${post.slug}/`} target="_blank" rel="noopener noreferrer" style="font-size: var(--text-xs); color: var(--color-muted);">LinkedIn</a>
               </div>
             </div>
           </article>

@@ -6,39 +6,42 @@ import SectionTitle from "../../components/SectionTitle.astro";
 const gallery = await getCollection("gallery");
 ---
 
-<BaseLayout title="Photo Gallery | Hon. Henry Musasizi">
-  <section class="container mx-auto max-w-6xl px-6 py-10 md:py-16">
-    <div class="card p-6 sm:p-8 md:p-10">
+<BaseLayout title="Photo Gallery | Hon. Henry Musasizi" description="Visual moments from public engagements, development launches, and national events.">
+  <section class="section">
+    <div class="container--wide" style="max-width: var(--container-wide); margin: 0 auto; padding: 0 var(--space-6);">
       <SectionTitle
         eyebrow="Media"
         title="Photo Gallery"
         description="Visual moments from public engagements, development launches, and national events."
       />
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          gallery.map((item) => (
-            <a
-              href={`/gallery/${item.slug}/`}
-              class="card group block overflow-hidden p-0 no-underline hover:text-inherit"
-            >
-              <figure class="m-0">
-                <img
-                  class="h-56 w-full object-cover transition duration-200 group-hover:scale-[1.02]"
-                  src={item.data.image}
-                  alt={item.data.title}
-                  loading="lazy"
-                />
-                <figcaption class="p-4 sm:p-5">
-                  <h3 class="font-bold text-coffee group-hover:text-coffee">{item.data.title}</h3>
-                  {item.data.caption && <p class="mt-1 line-clamp-2 text-sm text-[#2C2C2C]/80">{item.data.caption}</p>}
-                  <span class="mt-3 inline-block text-sm font-semibold text-[#C8922A] group-hover:text-[#4B2E0A]">
-                    View →
-                  </span>
-                </figcaption>
-              </figure>
-            </a>
-          ))
-        }
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-6);">
+        {gallery.map((item) => (
+          <a
+            href={`/gallery/${item.slug}/`}
+            class="card"
+            style="display: block; overflow: hidden; padding: 0; text-decoration: none; color: inherit;"
+          >
+            <figure style="margin: 0;">
+              <img
+                src={item.data.image}
+                alt={item.data.title}
+                loading="lazy"
+                style="width: 100%; height: 220px; object-fit: cover; display: block; transition: transform 0.3s ease;"
+                onmouseover="this.style.transform='scale(1.03)'"
+                onmouseout="this.style.transform='scale(1)'"
+              />
+              <figcaption style="padding: var(--space-4) var(--space-5);">
+                <h3 style="font-size: var(--text-base); font-weight: 600;">{item.data.title}</h3>
+                {item.data.caption && (
+                  <p style="font-size: var(--text-sm); color: var(--color-muted); margin-top: var(--space-1);">{item.data.caption}</p>
+                )}
+                <span style="display: inline-block; margin-top: var(--space-3); font-size: var(--text-sm); font-weight: 600; color: var(--color-accent);">
+                  View →
+                </span>
+              </figcaption>
+            </figure>
+          </a>
+        ))}
       </div>
     </div>
   </section>
