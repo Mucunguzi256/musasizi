@@ -625,7 +625,7 @@ p:last-child {
   z-index: 2;
 }
 
-/* Role titles beneath portrait */
+/* Role titles beneath portrait — typewriter cycling */
 .hero__titles {
   display: flex;
   flex-direction: column;
@@ -633,32 +633,45 @@ p:last-child {
   gap: var(--space-2);
   margin-top: var(--space-5);
   width: 100%;
+  min-height: 4.5rem;
+  position: relative;
 }
 
 .hero__title-line {
-  font-family: var(--font-body);
+  font-family: var(--font-mono);
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--color-text);
   text-align: center;
   line-height: var(--leading-snug);
-  padding: var(--space-1) var(--space-4);
+  padding: var(--space-1) var(--space-3);
   background: var(--color-accent-subtle);
   border-left: 3px solid var(--color-accent);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  opacity: 0;
-  transform: translateY(12px);
-  animation: titleReveal 0.5s var(--ease-out) forwards;
-  animation-delay: calc(0.8s + var(--i, 0) * 0.15s);
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
+  min-height: 1.6em;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
 }
 
-@keyframes titleReveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.hero__title-line.active {
+  visibility: visible;
+  position: relative;
+}
+
+/* Blinking cursor */
+.hero__title-line.typing::after {
+  content: "|";
+  display: inline;
+  animation: typeBlink 0.7s step-end infinite;
+  color: var(--color-accent);
+  margin-left: 2px;
+}
+
+@keyframes typeBlink {
+  50% { opacity: 0; }
 }
 
 /* Coat of arms watermark behind portrait */
@@ -952,6 +965,9 @@ p:last-child {
     padding: var(--space-2) var(--space-3);
     max-width: 280px;
     font-size: var(--text-xs);
+  }
+  .hero__titles {
+    min-height: 3.5rem;
   }
   .stats-bar {
     grid-template-columns: repeat(2, 1fr);

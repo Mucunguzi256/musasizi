@@ -56,10 +56,10 @@ const posts = (await getCollection("blog"))
           height="420"
           style="aspect-ratio: 1; object-fit: cover;"
         />
-        <div class="hero__titles">
-          <span class="hero__title-line" style="--i: 0">Minister of Finance, Planning &amp; Economic Development</span>
-          <span class="hero__title-line" style="--i: 1">MP Rubanda East</span>
-          <span class="hero__title-line" style="--i: 2">NRM Chairperson, Rubanda District</span>
+        <div class="hero__titles" id="hero-titles">
+          <span class="hero__title-line" data-text="Minister of Finance, Planning &amp; Economic Development"></span>
+          <span class="hero__title-line" data-text="MP Rubanda East"></span>
+          <span class="hero__title-line" data-text="NRM Chairperson, Rubanda District"></span>
         </div>
       </div>
     </div>
@@ -189,3 +189,60 @@ const posts = (await getCollection("blog"))
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  (function () {
+    const container = document.getElementById("hero-titles");
+    if (!container) return;
+
+    const lines = container.querySelectorAll(".hero__title-line");
+    if (!lines.length) return;
+
+    const texts = Array.from(lines).map((el) => el.dataset.text || "");
+    let activeIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    // Show first line immediately (empty, with cursor)
+    lines[activeIndex].classList.add("active", "typing");
+
+    function tick() {
+      const el = lines[activeIndex];
+      const fullText = texts[activeIndex];
+
+      if (!isDeleting) {
+        charIndex++;
+        el.textContent = fullText.slice(0, charIndex);
+
+        if (charIndex >= fullText.length) {
+          // Pause before deleting
+          setTimeout(() => {
+            isDeleting = true;
+            tick();
+          }, 2000);
+          return;
+        }
+      } else {
+        charIndex--;
+        el.textContent = fullText.slice(0, charIndex);
+
+        if (charIndex <= 0) {
+          // Move to next line
+          el.classList.remove("active", "typing");
+          el.textContent = "";
+          isDeleting = false;
+          activeIndex = (activeIndex + 1) % texts.length;
+          lines[activeIndex].classList.add("active", "typing");
+          setTimeout(tick, 400);
+          return;
+        }
+      }
+
+      const speed = isDeleting ? 20 : 50 + Math.random() * 30;
+      setTimeout(tick, speed);
+    }
+
+    // Start after a short delay
+    setTimeout(tick, 600);
+  })();
+</script>
