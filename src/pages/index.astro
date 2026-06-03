@@ -192,57 +192,84 @@ const posts = (await getCollection("blog"))
 
 <script>
   (function () {
-    const container = document.getElementById("hero-titles");
+    var container = document.getElementById("hero-titles");
     if (!container) return;
 
-    const lines = container.querySelectorAll(".hero__title-line");
+    var lines = container.querySelectorAll(".hero__title-line");
     if (!lines.length) return;
 
-    const texts = Array.from(lines).map((el) => el.dataset.text || "");
-    let activeIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-
-    // Show first line immediately (empty, with cursor)
-    lines[activeIndex].classList.add("active", "typing");
+    var texts = Array.from(lines).map(function (el) { return el.dataset.text || ""; });
+    var phase = 0; // 0=typing line1, 1=typing line2, 2=typing line3, 3=pause, 4=deleting all
+    var charIndex = 0;
+    var deletingLine = 2; // delete from bottom up
 
     function tick() {
-      const el = lines[activeIndex];
-      const fullText = texts[activeIndex];
+      // --- TYPING PHASES ---
+      if (phase < 3) {
+        var el = lines[phase];
+        var full = texts[phase];
+        if (charIndex === 0) el.classList.add("typing");
 
-      if (!isDeleting) {
         charIndex++;
-        el.textContent = fullText.slice(0, charIndex);
+        el.textContent = full.slice(0, charIndex);
 
-        if (charIndex >= fullText.length) {
-          // Pause before deleting
-          setTimeout(() => {
-            isDeleting = true;
-            tick();
-          }, 2000);
-          return;
+        if (charIndex >= full.length) {
+          el.classList.remove("typing");
+          charIndex = 0;
+          phase++;
+          if (phase === 3) {
+            // All three typed — pause then delete
+            setTimeout(tick, 3000);
+            return;
+          }
         }
-      } else {
-        charIndex--;
-        el.textContent = fullText.slice(0, charIndex);
 
-        if (charIndex <= 0) {
-          // Move to next line
-          el.classList.remove("active", "typing");
-          el.textContent = "";
-          isDeleting = false;
-          activeIndex = (activeIndex + 1) % texts.length;
-          lines[activeIndex].classList.add("active", "typing");
-          setTimeout(tick, 400);
-          return;
-        }
+        var speed = 50 + Math.random() * 40;
+        setTimeout(tick, speed);
+        return;
       }
 
-      const speed = isDeleting ? 20 : 50 + Math.random() * 30;
-      setTimeout(tick, speed);
+      // --- PAUSE PHASE (handled above with setTimeout) ---
+
+      // --- DELETING PHASE ---
+      if (phase === 3) {
+        // Start deleting from bottom line
+        deletingLine = 2;
+        lines[deletingLine].classList.add("typing");
+        phase = 4;
+      }
+
+      if (phase === 4) {
+        var el = lines[deletingLine];
+        var full = texts[deletingLine];
+        var current = el.textContent.length;
+
+        if (current > 0) {
+          el.textContent = full.slice(0, current - 1);
+          setTimeout(tick, 15);
+          return;
+        }
+
+        // This line fully deleted
+        el.classList.remove("typing");
+        deletingLine--;
+
+        if (deletingLine < 0) {
+          // All lines deleted — restart
+          lines.forEach(function (l) { l.textContent = ""; });
+          phase = 0;
+          charIndex = 0;
+          setTimeout(tick, 300);
+          return;
+        }
+
+        lines[deletingLine].classList.add("typing");
+        setTimeout(tick, 10);
+        return;
+      }
     }
 
-    // Start after a short delay
-    setTimeout(tick, 600);
+    // Start after page load delay
+    setTimeout(tick, 800);
   })();
 </script>

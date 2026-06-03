@@ -621,20 +621,17 @@ p:last-child {
   width: 100%;
   max-width: 420px;
   object-fit: cover;
-  position: relative;
-  z-index: 2;
+  display: block;
 }
 
 /* Role titles beneath portrait — typewriter cycling */
 .hero__titles {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
-  margin-top: var(--space-5);
+  align-items: flex-start;
+  gap: 2px;
+  margin-top: 0;
   width: 100%;
-  min-height: 4.5rem;
-  position: relative;
 }
 
 .hero__title-line {
@@ -642,26 +639,16 @@ p:last-child {
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--color-text);
-  text-align: center;
+  text-align: left;
   line-height: var(--leading-snug);
   padding: var(--space-1) var(--space-3);
   background: var(--color-accent-subtle);
-  border-left: 3px solid var(--color-accent);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   width: 100%;
   max-width: 380px;
-  min-height: 1.6em;
-  visibility: hidden;
-  position: absolute;
-  top: 0;
+  min-height: 1.8em;
 }
 
-.hero__title-line.active {
-  visibility: visible;
-  position: relative;
-}
-
-/* Blinking cursor */
+/* Blinking cursor on the active (currently typing/deleting) line */
 .hero__title-line.typing::after {
   content: "|";
   display: inline;
@@ -959,15 +946,9 @@ p:last-child {
   }
   .hero__title-line {
     text-align: center;
-    border-left: none;
-    border-top: 2px solid var(--color-accent);
-    border-radius: var(--radius-sm);
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-1) var(--space-2);
     max-width: 280px;
     font-size: var(--text-xs);
-  }
-  .hero__titles {
-    min-height: 3.5rem;
   }
   .stats-bar {
     grid-template-columns: repeat(2, 1fr);
