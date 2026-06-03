@@ -547,8 +547,7 @@ p:last-child {
 .hero__portrait {
   width: 100%;
   max-width: 420px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl);
+  object-fit: cover;
   position: relative;
   z-index: 2;
 }

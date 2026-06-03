@@ -21,29 +21,7 @@ const posts = (await getCollection("blog"))
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero__grid">
-      <div class="hero__portrait-wrapper animate-fade-in">
-        <div class="hero__crest" aria-hidden="true">
-          <!-- Uganda Coat of Arms SVG watermark -->
-          <svg viewBox="0 0 500 500" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M250 30L310 120H190L250 30Z" />
-            <path d="M250 60L180 170H320L250 60Z" />
-            <path d="M150 200L250 350L350 200H150Z" />
-            <path d="M120 250L250 430L380 250H120Z" />
-            <circle cx="250" cy="260" r="60" />
-            <path d="M200 260L235 290L300 240" stroke="currentColor" stroke-width="8" fill="none" />
-          </svg>
-        </div>
-        <img
-          src="/images/Hon_Musasiizi.png"
-          alt={siteData.name}
-          class="hero__portrait"
-          width="420"
-          height="420"
-          style="aspect-ratio: 1; object-fit: cover;"
-        />
-      </div>
-
-      <div class="hero__content animate-fade-in delay-200">
+      <div class="hero__content animate-fade-in">
         <span class="hero__role">Official Portfolio</span>
         <h1 class="hero__name">{siteData.name}</h1>
         <p class="hero__title">{siteData.title}</p>
@@ -55,6 +33,28 @@ const posts = (await getCollection("blog"))
           <a href="/speeches" class="btn btn--outline">
             Speeches & Statements
           </a>
+        </div>
+
+        <div class="hero__portrait-wrapper animate-fade-in delay-200">
+          <div class="hero__crest" aria-hidden="true">
+            <!-- Uganda Coat of Arms SVG watermark -->
+            <svg viewBox="0 0 500 500" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M250 30L310 120H190L250 30Z" />
+              <path d="M250 60L180 170H320L250 60Z" />
+              <path d="M150 200L250 350L350 200H150Z" />
+              <path d="M120 250L250 430L380 250H120Z" />
+              <circle cx="250" cy="260" r="60" />
+              <path d="M200 260L235 290L300 240" stroke="currentColor" stroke-width="8" fill="none" />
+            </svg>
+          </div>
+          <img
+            src="/images/Hon_Musasiizi.png"
+            alt={siteData.name}
+            class="hero__portrait"
+            width="420"
+            height="420"
+            style="aspect-ratio: 1; object-fit: cover;"
+          />
         </div>
       </div>
     </div>
