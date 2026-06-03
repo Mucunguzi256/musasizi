@@ -3,3 +3,8 @@ dist
 .astro
 .DS_Store
 .env
+
+# Temporary design files
+.open-design-*
+henry-musasizi-design-proposal.md
+TODO.md
