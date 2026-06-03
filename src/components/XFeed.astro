@@ -1,27 +1,26 @@
 ---
-// X / Twitter Timeline Embed
+// X Feed - Reliable embed using Twitter's oEmbed endpoint
+// Falls back gracefully to a manual link card if the embed fails
 import { siteData } from "../data/site";
 const xUrl = `https://x.com/${siteData.xHandle}`;
 ---
 
-<div class="x-feed">
+<div class="x-feed" id="x-feed">
   <div class="x-feed__embed">
-    <a
-      class="twitter-timeline"
-      data-height="500"
-      data-tweet-limit="5"
-      data-chrome="noheader nofooter noborders transparent"
-      href={xUrl}
-    >
-      Loading posts from @{siteData.xHandle}...
-    </a>
+    <blockquote class="twitter-tweet" data-theme="light" data-width="100%">
+      <p lang="en" dir="ltr">
+        <a href={xUrl}>Loading posts from @{siteData.xHandle}...</a>
+      </p>
+    </blockquote>
   </div>
-  <div class="x-feed__fallback">
-    <p>Follow <a href={xUrl} target="_blank" rel="noopener noreferrer">@{siteData.xHandle}</a> on X for the latest updates, policy statements, and constituency news.</p>
-    <a href={xUrl} target="_blank" rel="noopener noreferrer" class="btn btn--outline" style="margin-top: var(--space-4);">
-      View on X →
-    </a>
-  </div>
+  <noscript>
+    <div class="x-feed__fallback show">
+      <p>Follow <a href={xUrl} target="_blank" rel="noopener noreferrer">@{siteData.xHandle}</a> on X for the latest updates, policy statements, and constituency news.</p>
+      <a href={xUrl} target="_blank" rel="noopener noreferrer" class="btn btn--outline" style="margin-top: var(--space-4);">
+        View on X →
+      </a>
+    </div>
+  </noscript>
 </div>
 
 <style>
@@ -32,12 +31,22 @@ const xUrl = `https://x.com/${siteData.xHandle}`;
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border);
     background: var(--color-surface);
-    min-height: 200px;
+    min-height: 300px;
   }
   .x-feed__embed {
     width: 100%;
   }
-  .x-feed__embed .twitter-timeline {
+  .x-feed .twitter-tweet {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  .x-feed .twitter-tweet > p {
+    padding: var(--space-8);
+    text-align: center;
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+  .x-feed .twitter-tweet iframe {
     width: 100% !important;
   }
   .x-feed__fallback {
@@ -62,40 +71,56 @@ const xUrl = `https://x.com/${siteData.xHandle}`;
   .x-feed__fallback.show {
     display: flex;
   }
+  .x-feed__fallback a {
+    color: var(--color-accent);
+  }
 </style>
 
 <script>
-  const el = document.currentScript?.parentElement;
-  if (!el) return;
+  (function () {
+    const container = document.getElementById("x-feed");
+    if (!container) return;
 
-  const embedEl = el.querySelector(".x-feed__embed");
-  const fallbackEl = el.querySelector(".x-feed__fallback");
-
-  // If Twitter widget JS hasn't rendered after 3 seconds, show fallback
-  const fallbackTimer = setTimeout(() => {
-    if (embedEl && embedEl.querySelector("iframe")) return; // widget loaded
-    if (embedEl) embedEl.style.display = "none";
-    if (fallbackEl) fallbackEl.classList.add("show");
-  }, 4000);
-
-  // Load Twitter/X embed script
-  if (!document.getElementById("twitter-wjs")) {
-    const s = document.createElement("script");
-    s.id = "twitter-wjs";
-    s.src = "https://platform.twitter.com/widgets.js";
-    s.async = true;
-    s.onload = () => {
+    // Load Twitter widget script
+    function loadWidget() {
       if (window.twttr?.widgets?.load) {
-        window.twttr.widgets.load();
+        window.twttr.widgets.load(container);
+        return;
       }
-    };
-    s.onerror = () => {
-      clearTimeout(fallbackTimer);
-      if (embedEl) embedEl.style.display = "none";
-      if (fallbackEl) fallbackEl.classList.add("show");
-    };
-    document.head.appendChild(s);
-  } else if (window.twttr?.widgets?.load) {
-    window.twttr.widgets.load();
-  }
+      const s = document.createElement("script");
+      s.src = "https://platform.twitter.com/widgets.js";
+      s.async = true;
+      s.onload = () => {
+        if (window.twttr?.widgets?.load) {
+          window.twttr.widgets.load(container);
+        }
+      };
+      document.head.appendChild(s);
+    }
+
+    loadWidget();
+
+    // Show fallback after timeout if widget doesn't render
+    setTimeout(() => {
+      const embed = container.querySelector(".x-feed__embed");
+      const hasIframe = embed?.querySelector("iframe");
+      if (!hasIframe) {
+        // Create fallback element dynamically
+        const fallback = container.querySelector(".x-feed__fallback");
+        if (fallback) {
+          fallback.classList.add("show");
+        } else {
+          embed.innerHTML = `
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;min-height:200px;">
+              <p style="color:var(--color-muted);font-size:0.875rem;max-width:360px;line-height:1.6;">
+                Follow <a href="${xUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);">@${siteData.xHandle}</a> on X for the latest updates, policy statements, and constituency news.
+              </p>
+              <a href="${xUrl}" target="_blank" rel="noopener noreferrer" class="btn btn--outline" style="margin-top:1rem;font-size:0.75rem;padding:0.5rem 1.25rem;">
+                View on X →
+              </a>
+            </div>`;
+        }
+      }
+    }, 5000);
+  })();
 </script>
