@@ -25,7 +25,7 @@ export const FOOTER_QUICK_LINKS: readonly NavLink[] = [
   { href: "/about", label: "About" },
   { href: "/speeches", label: "Speeches" },
   { href: "/blog", label: "News" },
-  { href: "/projects", label: "Achievements" },
+  // { href: "/projects", label: "Achievements" },
   { href: "/gallery", label: "Gallery" },
   { href: "/contact", label: "Contact" },
 ] as const;
