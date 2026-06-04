@@ -1,5 +1,6 @@
 ---
-// X Feed — fetches latest tweets at build time via curl (reliable for both Netlify & GitHub Pages)
+// X Feed — fetches tweets at build time via multiple fallback methods
+// Works on localhost, Netlify, and GitHub Pages
 import { siteData } from "../data/site";
 import { execSync } from "node:child_process";
 
@@ -15,29 +16,59 @@ interface Tweet {
 let tweets: Tweet[] = [];
 let error: string | null = null;
 
-try {
-  // Use curl to bypass Node fetch TLS fingerprint blocking
-  const xml = execSync(
-    `curl -sL --max-time 15 -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" "https://nitter.net/${xHandle}/rss"`,
-    { encoding: "utf-8", timeout: 20000 }
-  );
+async function fetchTweets(): Promise<Tweet[]> {
+  // Strategy 1: Try nitter.net with curl (works on macOS, often blocked on Linux CI)
+  try {
+    const xml = execSync(
+      `curl -sL --max-time 10 -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" "https://nitter.net/${xHandle}/rss"`,
+      { encoding: "utf-8", timeout: 12000 }
+    );
+    if (xml && xml.includes("<item>")) {
+      return parseRSS(xml);
+    }
+  } catch { /* fall through */ }
 
-  if (!xml || !xml.includes("<item>")) {
-    throw new Error("No items in RSS feed");
+  // Strategy 2: Try alternative Nitter instances
+  const mirrors = [
+    `https://nitter.poast.org/${xHandle}/rss`,
+    `https://nitter.privacydev.net/${xHandle}/rss`,
+  ];
+  for (const url of mirrors) {
+    try {
+      const xml = execSync(
+        `curl -sL --max-time 10 -H "User-Agent: Mozilla/5.0" "${url}"`,
+        { encoding: "utf-8", timeout: 12000 }
+      );
+      if (xml && xml.includes("<item>")) return parseRSS(xml);
+    } catch { continue; }
   }
 
-  // Parse RSS items
+  // Strategy 3: Try Node fetch as last resort
+  try {
+    const resp = await fetch(`https://nitter.net/${xHandle}/rss`, {
+      headers: { "User-Agent": "Mozilla/5.0", "Accept": "application/rss+xml" },
+      signal: AbortSignal.timeout(10000),
+    });
+    if (resp.ok) {
+      const xml = await resp.text();
+      if (xml.includes("<item>")) return parseRSS(xml);
+    }
+  } catch { /* fall through */ }
+
+  return [];
+}
+
+function parseRSS(xml: string): Tweet[] {
+  const results: Tweet[] = [];
   const itemRegex = /<item>([\s\S]*?)<\/item>/g;
   const titleRegex = /<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/;
   const linkRegex = /<link>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/;
   const dateRegex = /<pubDate>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/pubDate>/;
 
-  // Skip the first <item> (channel metadata)
   let match;
   let first = true;
-  while ((match = itemRegex.exec(xml)) !== null && tweets.length < 4) {
+  while ((match = itemRegex.exec(xml)) !== null && results.length < 4) {
     if (first) { first = false; continue; }
-    
     const content = match[1];
     const titleM = titleRegex.exec(content);
     const linkM = linkRegex.exec(content);
@@ -48,17 +79,19 @@ try {
         .replace(/^@\S+\s*:?\s*/, "")
         .replace(/^RT by @\S+:?\s*/, "")
         .trim();
-      // Convert nitter.net links to x.com
-      let link = linkM[1].replace(/^https?:\/\/nitter\.net/, "https://x.com");
-      tweets.push({
-        text,
-        date: dateM ? dateM[1] : "",
-        link,
-      });
+      let link = linkM[1].replace(/^https?:\/\/nitter\.\S+?\//, "https://x.com/");
+      results.push({ text, date: dateM ? dateM[1] : "", link });
     }
   }
-} catch (e) {
-  error = e instanceof Error ? e.message : String(e);
+  return results;
+}
+
+// Execute at build time
+const result = await fetchTweets();
+if (result.length > 0) {
+  tweets = result;
+} else {
+  error = "Could not fetch tweets from any source";
 }
 
 // Generate random engagement numbers for visual polish
