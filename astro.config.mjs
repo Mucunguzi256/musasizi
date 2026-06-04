@@ -4,7 +4,11 @@ import mdx from "@astrojs/mdx";
 import robotsTxt from "astro-robots-txt";
 
 export default defineConfig({
-  site: "https://henrymusasizi.ug",
+  // When on GitHub Pages, set site to "https://<user>.github.io/<repo>".
+  // Netlify overrides this via its deploy settings, so both hosts are supported.
+  site: process.env.CI
+    ? "https://mucunguzi256.github.io/musasizi"
+    : "https://henrymusasizi.ug",
   output: "static",
   integrations: [
     tailwind(),

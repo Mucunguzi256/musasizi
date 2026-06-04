@@ -1,126 +1,173 @@
 ---
-// X Feed - Reliable embed using Twitter's oEmbed endpoint
-// Falls back gracefully to a manual link card if the embed fails
+// X Feed — fetches latest tweets at build time via curl (reliable for both Netlify & GitHub Pages)
 import { siteData } from "../data/site";
+import { execSync } from "node:child_process";
+
 const xUrl = `https://x.com/${siteData.xHandle}`;
+
+interface Tweet {
+  text: string;
+  date: string;
+  link: string;
+}
+
+let tweets: Tweet[] = [];
+let error: string | null = null;
+
+try {
+  // Use curl to bypass Node fetch TLS fingerprint blocking
+  const xml = execSync(
+    `curl -sL --max-time 15 -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" "https://nitter.net/${siteData.xHandle}/rss"`,
+    { encoding: "utf-8", timeout: 20000 }
+  );
+
+  if (!xml || !xml.includes("<item>")) {
+    throw new Error("No items in RSS feed");
+  }
+
+  // Parse RSS items
+  const itemRegex = /<item>([\s\S]*?)<\/item>/g;
+  const titleRegex = /<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/;
+  const linkRegex = /<link>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/;
+  const dateRegex = /<pubDate>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/pubDate>/;
+
+  // Skip the first <item> (channel metadata)
+  let match;
+  let first = true;
+  while ((match = itemRegex.exec(xml)) !== null && tweets.length < 5) {
+    if (first) { first = false; continue; }
+    
+    const content = match[1];
+    const titleM = titleRegex.exec(content);
+    const linkM = linkRegex.exec(content);
+    const dateM = dateRegex.exec(content);
+
+    if (titleM && linkM) {
+      let text = titleM[1]
+        .replace(/^@\S+\s*:?\s*/, "")
+        .trim();
+      tweets.push({
+        text,
+        date: dateM ? dateM[1] : "",
+        link: linkM[1],
+      });
+    }
+  }
+} catch (e) {
+  error = e instanceof Error ? e.message : String(e);
+}
 ---
 
-<div class="x-feed" id="x-feed">
-  <div class="x-feed__embed">
-    <blockquote class="twitter-tweet" data-theme="light" data-width="100%">
-      <p lang="en" dir="ltr">
-        <a href={xUrl}>Loading posts from @{siteData.xHandle}...</a>
+<div class="x-feed">
+  {
+    error ? (
+      <p class="x-feed__error">
+        <a href={xUrl} target="_blank" rel="noopener noreferrer">
+          View @{siteData.xHandle} on X →
+        </a>
       </p>
-    </blockquote>
-  </div>
-  <noscript>
-    <div class="x-feed__fallback show">
-      <p>Follow <a href={xUrl} target="_blank" rel="noopener noreferrer">@{siteData.xHandle}</a> on X for the latest updates, policy statements, and constituency news.</p>
-      <a href={xUrl} target="_blank" rel="noopener noreferrer" class="btn btn--outline" style="margin-top: var(--space-4);">
-        View on X →
-      </a>
-    </div>
-  </noscript>
+    ) : tweets.length > 0 ? (
+      <ul class="x-feed__list">
+        {tweets.map((tweet) => (
+          <li class="x-feed__tweet">
+            <p class="x-feed__tweet-text">{tweet.text.length > 240 ? tweet.text.slice(0, 240) + "…" : tweet.text}</p>
+            <div class="x-feed__tweet-meta">
+              {tweet.date && (
+                <time datetime={tweet.date} class="x-feed__tweet-date">
+                  {new Date(tweet.date).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
+              )}
+              <a
+                href={tweet.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="x-feed__tweet-link"
+              >
+                View on X ↗
+              </a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="x-feed__empty">
+        <a href={xUrl} target="_blank" rel="noopener noreferrer">
+          View @{siteData.xHandle} on X →
+        </a>
+      </p>
+    )
+  }
 </div>
 
 <style>
   .x-feed {
     width: 100%;
     max-width: 100%;
-    overflow: hidden;
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border);
     background: var(--color-surface);
-    min-height: 300px;
+    overflow: hidden;
   }
-  .x-feed__embed {
-    width: 100%;
+
+  .x-feed__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
-  .x-feed .twitter-tweet {
-    width: 100% !important;
-    margin: 0 !important;
+
+  .x-feed__tweet {
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--color-border);
   }
-  .x-feed .twitter-tweet > p {
-    padding: var(--space-8);
-    text-align: center;
-    color: var(--color-muted);
+
+  .x-feed__tweet:last-child {
+    border-bottom: none;
+  }
+
+  .x-feed__tweet-text {
     font-size: var(--text-sm);
+    color: var(--color-text);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-2);
   }
-  .x-feed .twitter-tweet iframe {
-    width: 100% !important;
-  }
-  .x-feed__fallback {
-    display: none;
-    flex-direction: column;
+
+  .x-feed__tweet-meta {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: var(--space-8);
-    min-height: 200px;
+    justify-content: space-between;
+    gap: var(--space-3);
   }
-  .x-feed__fallback p {
+
+  .x-feed__tweet-date {
+    font-size: var(--text-xs);
     color: var(--color-muted);
+  }
+
+  .x-feed__tweet-link {
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .x-feed__tweet-link:hover {
+    text-decoration: underline;
+  }
+
+  .x-feed__error,
+  .x-feed__empty {
+    padding: var(--space-8);
+    text-align: center;
     font-size: var(--text-sm);
-    max-width: 360px;
+    color: var(--color-muted);
     line-height: var(--leading-relaxed);
   }
-  .x-feed__fallback .btn {
-    font-size: var(--text-xs);
-    padding: var(--space-2) var(--space-5);
-  }
-  .x-feed__fallback.show {
-    display: flex;
-  }
-  .x-feed__fallback a {
+
+  .x-feed__error a,
+  .x-feed__empty a {
     color: var(--color-accent);
   }
 </style>
-
-<script>
-  (function () {
-    const container = document.getElementById("x-feed");
-    if (!container) return;
-
-    // Load Twitter widget script
-    function loadWidget() {
-      if (window.twttr?.widgets?.load) {
-        window.twttr.widgets.load(container);
-        return;
-      }
-      const s = document.createElement("script");
-      s.src = "https://platform.twitter.com/widgets.js";
-      s.async = true;
-      s.onload = () => {
-        if (window.twttr?.widgets?.load) {
-          window.twttr.widgets.load(container);
-        }
-      };
-      document.head.appendChild(s);
-    }
-
-    loadWidget();
-
-    // Show fallback after timeout if widget doesn't render
-    setTimeout(() => {
-      const embed = container.querySelector(".x-feed__embed");
-      const hasIframe = embed?.querySelector("iframe");
-      if (!hasIframe) {
-        // Create fallback element dynamically
-        const fallback = container.querySelector(".x-feed__fallback");
-        if (fallback) {
-          fallback.classList.add("show");
-        } else {
-          embed.innerHTML = `
-            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;min-height:200px;">
-              <p style="color:var(--color-muted);font-size:0.875rem;max-width:360px;line-height:1.6;">
-                Follow <a href="${xUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent);">@${siteData.xHandle}</a> on X for the latest updates, policy statements, and constituency news.
-              </p>
-              <a href="${xUrl}" target="_blank" rel="noopener noreferrer" class="btn btn--outline" style="margin-top:1rem;font-size:0.75rem;padding:0.5rem 1.25rem;">
-                View on X →
-              </a>
-            </div>`;
-        }
-      }
-    }, 5000);
-  })();
-</script>
